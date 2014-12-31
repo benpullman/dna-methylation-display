@@ -1,0 +1,51 @@
+   <div class="row">
+     <div class="col-lg-12">
+<h4>Summary of information</h4>
+<h5>Length of target genome sequence: {{referenceLength}}</h5>
+<h5>Number of CpG sites: {{referenceCpGSites.length}}
+<h5>Number of bisulfite sequences: {{included}} used / {{excluded}} excluded / {{included + excluded}} total</h5>
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col-lg-12">
+<h4>Methylation status of each CpG site</h4>
+<div class="table-responsive">
+<table class="table">
+<tr>
+	<th>CpG position</th>
+  <th ng-repeat="area in percentMethylation">{{area.location}}</th>
+</tr>
+<tr>
+<td>Me-CpG</td>
+  <td ng-repeat="area in percentMethylation">{{area.m}}/{{area.m+area.u}}<br>{{area.m/(area.m+area.u)*100 | number: 1}}%</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-lg-12">
+<h4>Bisulfite sequence information</h4>
+<div class="table-responsive">
+<table class="table">
+<tr>
+  <th>Include?</th>
+  <th>Sequence name</th>
+  <th>mismatch (gap) / alignment length<br>(% identity)</th>
+  <th>Me-CpG (%)</th>
+  <th>unconverted (% converted)</th>
+  <th>Methylation pattern</th>
+</tr>
+<tr ng-repeat="analysis in analyses | orderBy:predicate">
+  <td><input ng-model="analysis.include" type="checkbox" ng-change="setMethylation()"></td>
+  <td>{{analysis.sequenceName}}</td>
+  <td>{{analysis.alignment.mismatches}} ({{analysis.alignment.gaps}}) / {{analysis.alignment.length}} ({{analysis.alignmentIdentity*100 | number: 1}})</td>
+  <td>{{analysis.methylation.methylatedCpGSites}} ({{analysis.methylation.methylatedCpGSites/(analysis.methylation.methylatedCpGSites+analysis.methylation.cpGSites)*100 | number: 1}})</td>
+  <td>{{analysis.bisulfite.unconvertedCpH}} ({{analysis.percentConversion*100 | number: 1}})</td>
+  <td><span ng-repeat="site in analysis.methylation.sequence track by $index"><img height="10px" width="10px" ng-show="site=='M'" src="img/closed_circle.png"/><img  height="10px" width="10px" ng-show="site=='U'" src="img/open_circle.png"/><img  height="10px" width="10px" ng-show="site=='-'" src="img/dash.png"/><img  height="10px" width="10px" ng-show="site=='G' || site=='A' || site=='T'" src="img/x.png"/></span></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
