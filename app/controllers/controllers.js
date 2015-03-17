@@ -3,12 +3,15 @@
 
 angular.module('app.controllers', [])
   .controller('MainController', ['$scope','$routeParams','Resource',function($scope,$routeParams,Resource) {
+    $scope.dynamicTooltipText = "sdofisjdf"
+    $scope.dynamicTooltip = "hi"
     $scope.showAll = true;
     $scope.regions = {};
     $scope.allSamples = {};
     //$scope.regions = Resource.get({id: $routeParams['id']})
     Resource.get({}, function(data){
       var one = "";
+      console.log(data)
       for(key in data.regions){
         one = key;
         break;
@@ -110,13 +113,24 @@ angular.module('app.controllers', [])
   				}
   			}
   		}
+      console.log("list of methylation?")
+      console.log(methylationSite)
   		return methylationSite;
   	}
   	$scope.percentMethylation = [];
-  	$scope.setMethylation = function(){
+  	$scope.setMethylation = function(include){
   		$scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
+      if(include){
+        $scope.included += 1
+        $scope.excluded -= 1
+      }
+      else{
+        $scope.excluded += 1
+        $scope.included -= 1
+      }
   	}
-  	$scope.predicate = '1-(methylation.methylatedCpGSites/(methylation.methylatedCpGSites+methylation.cpGSites))'
+  	
+    $scope.predicate = '1-(methylation.methylatedCpGSites/(methylation.methylatedCpGSites+methylation.cpGSites))'
   	$scope.includePredicate = 'include'
       //code here
   }]);

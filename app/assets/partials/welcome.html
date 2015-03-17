@@ -11,7 +11,7 @@
 	  	<form class="form form-horizontal" role="form" ng-submit="getUser()" ng-show="isReturningUser">
   			<div class="form-group">
     			<div class="col-sm-12">
-        			<input class="form-control" id="email" name="email" type="text" ng-model="email" placeholder="Email">
+        			<input class="form-control" id="email" name="email" type="email" ng-model="email" placeholder="Email" required>
         			<p class="help-block">Enter your email address to start</p>
     			</div>
   			</div>
@@ -26,13 +26,13 @@
   		<form class="form form-horizontal" role="form" ng-submit="newUser()" ng-show="isNewUser">
   		  	<div class="form-group">
     			<div class="col-sm-12">
-        			<input class="form-control" id="name" name="name" type="text" ng-model="name" placeholder="Name">
+        			<input class="form-control" id="name" name="name" type="text" ng-model="name" placeholder="Name" required>
         			<p class="help-block">Enter your name or nickname</p>
     			</div>
   			</div>
   			<div class="form-group">
     			<div class="col-sm-12">
-        			<input class="form-control" id="email" name="email" type="text" ng-model="email" placeholder="Email">
+        			<input class="form-control" id="email" name="email" type="text" ng-model="email" placeholder="Email" required>
         			<p class="help-block">Enter your email address</p>
     			</div>
   			</div>

@@ -16,8 +16,10 @@ angular.module('app.userController', [])
         });
     }
     $scope.getUser = function() {
+        console.log($scope.email)
         $scope.user = User.get({"email":$scope.email},function(success){
             initUser(success);
+            console.log(success)
         },function(error){
             alert(error);
         });
@@ -33,6 +35,7 @@ angular.module('app.userController', [])
         new_user.maps = [];
         new_user.params = [];
         User.add(new_user,function(success){
+            console.log(success)
             initUser(success);
         },function(error){
             alert(error);
