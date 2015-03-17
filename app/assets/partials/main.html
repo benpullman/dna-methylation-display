@@ -2,9 +2,6 @@
 <div class="row">
 <div ng-show="showAll">
 <h2>HITMAP</h2>
-<a href="#" tooltip="{{dynamicTooltip}}">{{dynamicTooltipText}}</a>
-<svg height="25" width="25"><rect cx="5" cy="5" width="5" height="5" fill="red" fill-opacity=".2"></rect><rect cx="5" cy="5" width="10" height="10" fill="blue"fill-opacity=".7" ></rect></svg>
-<svg height="25" width="25"><circle cx="5" cy="5" r="5" fill="red" fill-opacity=".2"></circle><circle cx="5" cy="5" r="5" fill="blue" fill-opacity=".8"></circle>
 </svg>
 <table>
   <tr>
@@ -13,19 +10,19 @@
         <tr>
           <th>Sample</th>
         </tr>
-        <tr ng-repeat="sampleName in allSamples | orderBy:'sampleName'">
+        <tr ng-repeat="sampleName in allSamples | orderBy">
           <td style="height:30px">{{sampleName}} </td>
         </tr>
         <br>
       </table>
     </td>
-    <td ng-repeat="(regionName,region) in regions.regions">
+    <td ng-repeat="(regionName,region) in regions">
       <table> 
         <tr><th>{{regionName}}</th>
         </tr>
         <tr ng-repeat="(sampleName,sample) in region.samples | orderBy:'sampleName'">
           <td>
-      <a ng-show="sample.analyses.length>0" ng-click="getInfo(sample.analyses)">
+      <a ng-show="sample.analyses.length>0" ng-click="getInfo(sample.analyses)" tooltip="{{getTooltip(sampleName, sample)}}">
       <dot samples="sample.analyses"></dot></a>
           <span ng-show="sample.analyses.length==0"><dot></dot></span></td>
         </tr>

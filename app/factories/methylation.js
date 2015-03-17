@@ -16,6 +16,7 @@ factory('methylation', [function() {
                 }
             }
         }
+        // console.log(methylationSite)
         return methylationSite;
     };
 	return{
@@ -36,15 +37,14 @@ factory('methylation', [function() {
           }
         };
         var referenceCpGSites = data[0].methylation.reference
-        var analyses = data;
-        var percentMethylation = generateMethylation(referenceCpGSites,analyses);
+        var methylationSitesAnalysis = generateMethylation(referenceCpGSites,data);
         var totalMethylation = 0
-        for(var i = 0; i < percentMethylation.length; i++){
-          if (percentMethylation[i]['m'] + percentMethylation[i]['u']){
-            totalMethylation += percentMethylation[i]['m']/(percentMethylation[i]['m']+percentMethylation[i]['u'])
+        for(var i = 0; i < methylationSitesAnalysis.length; i++){
+          if (methylationSitesAnalysis[i]['m'] + methylationSitesAnalysis[i]['u']){
+            totalMethylation += methylationSitesAnalysis[i]['m']/(methylationSitesAnalysis[i]['m']+methylationSitesAnalysis[i]['u'])
           }
         }           
-        return {'methylationLevel':totalMethylation/percentMethylation.length,'included':included, 'excluded':excluded};
+        return {'methylationLevel':totalMethylation/methylationSitesAnalysis.length,'included':included, 'excluded':excluded};
       }
         return 0
     }

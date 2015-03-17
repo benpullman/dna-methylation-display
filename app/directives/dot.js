@@ -19,7 +19,7 @@ angular.module('dotDirective', [])
           } else {
             radius = samples.length
           }
-          console.log(radius)
+          // console.log(radius)
 
           return radius/4
         };
