@@ -20,7 +20,7 @@ factory('methylation', [function() {
         return methylationSite;
     };
 	return{
-		getMethylationLevel: function(data){
+		getMethylationLevel: function(data, identityCutoff){
         if (typeof data === "undefined"){
             return 0;
         } else if (data.length > 0){
@@ -29,7 +29,7 @@ factory('methylation', [function() {
         for(i=0;i<data.length;i++){
           data[i].alignmentIdentity = (data[i].alignment.end-data[i].alignment.start-data[i].alignment.mismatches-data[i].alignment.gaps)/(data[i].alignment.end-data[i].alignment.start);
           data[i].percentConversion = data[i].methylation.methylated/(data[i].methylation.methylated+data[i].methylation.unmethylated);
-          if (data[i].alignmentIdentity > .95){
+          if (data[i].alignmentIdentity > identityCutoff){
             data[i].include = true;
             included += 1;
           }else{

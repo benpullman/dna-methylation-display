@@ -3,7 +3,8 @@ angular.module('dotDirective', [])
   return {
     restrict: "E",
     scope: {
-        samples: '='
+        samples: '=',
+        identityCutoff: '='
     },
     templateUrl: 'partials/methylationDot.html',
     replace: true,
@@ -23,9 +24,9 @@ angular.module('dotDirective', [])
 
           return radius/4
         };
-        $scope.methylation = methylation.getMethylationLevel($scope.samples).methylationLevel
-        $scope.included = methylation.getMethylationLevel($scope.samples).included
-        $scope.excluded = methylation.getMethylationLevel($scope.samples).excluded
+        $scope.methylation = methylation.getMethylationLevel($scope.samples, $scope.identityCutoff).methylationLevel
+        $scope.included = methylation.getMethylationLevel($scope.samples, $scope.identityCutoff).included
+        $scope.excluded = methylation.getMethylationLevel($scope.samples, $scope.identityCUtoff).excluded
         $scope.radius = getRadius($scope.samples);
     }]
   }

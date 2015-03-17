@@ -74,7 +74,7 @@ angular.module('app.controllers', [])
         for(i=0;i<data.length;i++){
           data[i].alignmentIdentity = (data[i].alignment.end-data[i].alignment.start-data[i].alignment.mismatches-data[i].alignment.gaps)/(data[i].alignment.end-data[i].alignment.start);
           data[i].percentConversion = data[i].methylation.methylated/(data[i].methylation.methylated+data[i].methylation.unmethylated);
-          if (data[i].alignmentIdentity > .95){
+          if (data[i].alignmentIdentity > $scope.identityCutoff){
             data[i].include = true;
             $scope.included += 1;
           }else{

@@ -3,6 +3,10 @@
 <div ng-show="showAll">
 <h2>HITMAP</h2>
 </svg>
+<div class="input-group">
+Select Identity Cutoff for Calculating Methylation Level:
+ <span><input ng-model="identityCutoff" ng-init="identityCutoff = .95" min="0.5" max="1.0" step="0.005" type="range">{{identityCutoff}}</input></span>
+</div>
 <table>
   <tr>
     <td>
@@ -23,7 +27,7 @@
         <tr ng-repeat="(sampleName,sample) in region.samples | orderBy:'sampleName'">
           <td>
       <a ng-show="sample.analyses.length>0" ng-click="getInfo(sample.analyses)" tooltip="{{getTooltip(sampleName, sample)}}">
-      <dot samples="sample.analyses"></dot></a>
+      <dot samples="sample.analyses" identity-cutoff="identityCutoff"></dot></a>
           <span ng-show="sample.analyses.length==0"><dot></dot></span></td>
         </tr>
         <br>
