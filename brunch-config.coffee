@@ -8,7 +8,6 @@ exports.config =
       order:
         before:
           [
-           'bower_components/jquery/dist/jquery.js',
            'vendor/javascripts/bootstrap.js',
            'vendor/javascripts/bootstrap/tooltip.js'
           ]
