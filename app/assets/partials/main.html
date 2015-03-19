@@ -1,21 +1,39 @@
+<style>
+.no-space {
+    border-collapse: collapse;
+    cellspacing: 0;
+}
+</style>
 <div class="container">
 <div class="row">
 <div ng-show="showAll">
+
 <h2>HITMAP</h2>
 </svg>
 <div class="input-group">
 Select Identity Cutoff for Calculating Methylation Level:
  <span><input ng-model="identityCutoff" ng-init="identityCutoff = .95" min="0.5" max="1.0" step="0.005" type="range">{{identityCutoff}}</input></span>
 </div>
-<table>
-  <tr>
+    <div class="input-group">
+    <label>View As</label>
+    <div class="switch-toggle well">
+      <input type="radio" name="view" id="square" value="square" ng-init="view = 'square'" ng-model="view"><label for="square">Lines</label>
+      <input type="radio" name="view" id="circle" value="circle" ng-model="view"><label for="circle">Dots</label>
+      <a class="btn btn-primary"></a>
+    </div>
+    {{view}}
+  </div>
+<!-- <table ng-class="{'no-space': view=='square'}">
+ -->
+ <table>  
+ <tr>
     <td>
       <table> <!-- first column -->
         <tr>
           <th>Sample</th>
         </tr>
         <tr ng-repeat="sampleName in allSamples | orderBy">
-          <td style="height:30px">{{sampleName}} </td>
+          <td style="height:30px; padding: 0px;">{{sampleName}} </td>
         </tr>
         <br>
       </table>
@@ -25,9 +43,11 @@ Select Identity Cutoff for Calculating Methylation Level:
         <tr><th>{{regionName}}</th>
         </tr>
         <tr ng-repeat="(sampleName,sample) in region.samples | orderBy:'sampleName'">
-          <td>
+          <td style="height:25px; padding: 0px;">
       <a ng-show="sample.analyses.length>0" ng-click="getInfo(sample.analyses)" tooltip="{{getTooltip(sampleName, sample)}}">
-      <dot samples="sample.analyses" identity-cutoff="identityCutoff"></dot></a>
+      <span ng-show="view=='circle'"><dot samples="sample.analyses" identity-cutoff="identityCutoff"></dot></span>
+      <span ng-show="view=='square'"><block samples="sample.analyses" identity-cutoff="identityCutoff"></block></span>
+      </a>
           <span ng-show="sample.analyses.length==0"><dot></dot></span></td>
         </tr>
         <br>
@@ -74,7 +94,7 @@ Select Identity Cutoff for Calculating Methylation Level:
   <td>{{analysis.alignment.mismatches}} ({{analysis.alignment.gaps}}) / {{(analysis.alignment.end-analysis.alignment.start)}} ({{analysis.alignmentIdentity*100 | number: 1}})</td>
   <td>{{analysis.methylation.methylated}} ({{analysis.methylation.methylated/(analysis.methylation.methylated+analysis.methylation.unmethylated)*100 | number: 1}})</td>
   <!--<td>{{analysis.bisulfite.unconvertedCpH}} ({{analysis.percentConversion*100 | number: 1}})</td>-->
-  <td><span ng-repeat="site in analysis.methylation.sequence track by $index"><img height="10px" width="10px" ng-show="site=='M'" src="img/closed_circle.png"/><img  height="10px" width="10px" ng-show="site=='U'" src="img/open_circle.png"/><img  height="10px" width="10px" ng-show="site=='-'" src="img/dash.png"/><img  height="10px" width="10px" ng-show="site=='G' || site=='A' || site=='T'" src="img/x.png"/></span></td>
+  <td><span ng-repeat="site in analysis.methylation.sequence track by $index"><img height="10px" width="10px" ng-show="site=='M'" src="img/closed_circle.png"/><img  height="10px" width="10px" ng-show="site=='U'" src="img/open_circle.png"/><img  height="10px" width="10px" ng-show="site=='-'" src="img/dash.png"/><img  height="10px" width="10px" ng-show="site=='G' || site=='A' || site=='T'" src="img/x.png"/><img  height="10px" width="10px" ng-show="site=='X' || site=='C' || site=='error'" src="img/red_x.png"/></span></td>
 </tr>
 </table>
 

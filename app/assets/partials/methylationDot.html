@@ -1,4 +1,4 @@
 <svg height="25" width="25">
-  <rect ng-hide="noSamples" x="{{(25-radius)/2}}" width="{{radius}}" height="25" stroke-width="0" fill="blue" fill-opacity="{{ 1-methylation }}" />
-  <rect ng-hide="noSamples" x="{{(25-radius)/2}}" width="{{radius}}" height="25" stroke-width="0" fill="red" fill-opacity="{{ methylation }}"/>
+  <circle ng-hide="noSamples" cx="12.5" cy="12.5" r="{{ radius }}" stroke-width="0" fill="blue" fill-opacity="{{ 1-methylation }}" />
+  <circle ng-hide="noSamples" cx="12.5" cy="12.5" r="{{ radius }}" stroke-width="0" fill="red" fill-opacity="{{ methylation }}"/>
 </svg>
