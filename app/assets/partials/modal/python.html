@@ -1,24 +1,10 @@
 <div class="modal-header">
-<h4 class="modal-title">{{asset.name}}<br>More Information</h4></div>
+<h4 class="modal-title">{{asset.name}}<br>Python Codes</h4></div>
 <div class="modal-body">
 	<div>
-	<b>Copy Asset URL</b>
+	<b>Copy Python Code</b>
 	<input name="url" type="text" class="form-control" ng-model="url"></input>
 	</div>
-	<br>
-	<div>
-	<b>Watch List</b><br />
-	<p>
-	<span ng-repeat="watcher in asset.watch"><span ng-show="$index!=0">, </span>{{watcher}}</span>
-	</p>
-	</div>
-	<div><b>Date Last Updated</b>
-	 	<p>{{asset.versions[asset.currentVersion-1].timeCreated | date:'MMMM dd, yyyy, h:mm:ss a'}}</p>
-	 	</div>
-	 <div><b>Owner</b>
-	 	<p>{{asset.owner}}</p>
-	 </div>
-</div>
 <div class="modal-footer">
 <button type="button" class="btn btn-default" ng-click="$close(result)" data-dismiss="modal">Close</button>
 </div>

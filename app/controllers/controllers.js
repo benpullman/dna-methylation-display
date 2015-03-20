@@ -143,8 +143,6 @@ angular.module('app.controllers', [])
             var filtered = $filter('nameExp')(sampleFormat,$scope.regex);
             var bold = new RegExp('(' + filtered + ')', 'i');
             $scope.sampleFormat = sampleFormat.replace(bold, '<span style="background-color:yellow">$1</span>');
-            console.log(filtered)
-            console.log($scope.regex)
                return $sce.trustAsHtml($scope.sampleFormat);
              };
 
@@ -160,6 +158,8 @@ angular.module('app.controllers', [])
     };
 
     var changeRegex = function(regex){
+      console.log("changed!")
+      console.log(regex)
       $scope.regex = regex
     }
 
