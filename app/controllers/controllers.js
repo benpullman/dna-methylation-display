@@ -2,26 +2,11 @@
 /* Controllers */
 
 angular.module('app.controllers', [])
-  .controller('MainController', ['$scope','$routeParams','$filter','loadData','methylation',function($scope,$routeParams,$filter, loadData, methylation) {
+  .controller('MainController', ['$scope','$routeParams','$filter','loadData','methylation', '$modal', '$sce', function($scope,$routeParams,$filter, loadData, methylation, $modal, $sce) {
     $scope.showAll = true;
     $scope.regions = {}; //dictionary of regions
     $scope.allSamples = []; //list of sampleNames
-    // Resource.get({}, function(data){
-    //   var one = "";
-    //   console.log(data)
-    //   for(key in data.regions){
-    //     console.log(key)
-    //     one = key;
-    //     break;
-    //   }
-    //   var allKeys = []
-    //   for(sample in data.regions[one].samples){
-    //     allKeys.push(sample)
-    //   }
-    //   $scope.allSamples = allKeys;
-    //   console.log(allKeys)
-    //   $scope.regions = data;
-    // });
+
     var load = function(){
       loadData.load().then(function(loaded){
         // console.log(loaded);
@@ -34,7 +19,6 @@ angular.module('app.controllers', [])
       });
     };
     load();
-
 
     // $scope.getMethylationLevel = function(data){
     //     if (typeof data === "undefined"){
@@ -91,30 +75,24 @@ angular.module('app.controllers', [])
       $scope.showAll = true
     };
 
+    $scope.python = function(sample){
+      $modal.open({
+        templateUrl: 'partials/modal/python.html',
+        size: 'md',
+        controller: ['$scope', '$modalInstance', function($scope, $modalInstance){
+          $scope.change = function(){
+            console.log("submitted")
+          };
+        }]
+      });
+
+    }
+
     $scope.getTooltip = function(sampleName,sample){
       return "Sample "+sampleName+" for CpG island "+sample.analyses[0].referenceName+"\nRead Depth: "+sample.analyses.length+
       "\nAverage Methylation Level: "+$filter('number')(methylation.getMethylationLevel(sample.analyses).methylationLevel, 4);
     }
-  	/*Resource.get(
-  		{},
-  		function(data){
-  			$scope.excluded = 0
-  			$scope.included = 0
-  			for(i=0;i<data.length;i++){
-  				data[i].alignmentIdentity = (data[i].alignment.length-data[i].alignment.mismatches)/data[i].alignment.length;
-  				data[i].percentConversion = data[i].bisulfite.convertedCpH/(data[i].bisulfite.unconvertedCpH+data[i].bisulfite.convertedCpH);
-  				if (data[i].alignmentIdentity > .95 && data[i].percentConversion > .75){
-  					data[i].include = true;
-  					$scope.included += 1;
-  				}else{
-  					$scope.excluded += 1;
-  				}
-  			}
-  			$scope.referenceCpGSites = data[0].methylation.reference
-  			$scope.referenceLength = data[0].referenceLength
-  			$scope.analyses = data;
-  			$scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
-  	});*/
+
   	var generateMethylation = function(refSites,data){
   		var methylationSite = []
   		for(i=0;i<refSites.length;i++){
@@ -136,6 +114,55 @@ angular.module('app.controllers', [])
   		return methylationSite;
   	}
   	$scope.percentMethylation = [];
+
+    $scope.changeName = function(regions, regex){
+      // var sampleFormat = Object.getKeys(regions)
+      console.log(regions)
+      for(first in regions) break;
+        console.log(first)
+      var sample = regions[first]['samples']
+      for (phirst in sample) break;
+      var sampleFormat = sample[phirst]['analyses'][0]['sampleName']
+      $modal.open({
+        templateUrl: 'partials/modal/regexName.html',
+        size: 'md',
+        resolve: {
+        sampleFormat: function (){
+            return sampleFormat;
+          },
+        regex: function(){
+          return regex;
+          }
+        },
+        controller: ['$scope', '$modalInstance', 'sampleFormat', 'regex', function($scope, $modalInstance, sampleFormat, regex){
+          $scope.sampleFormat = sampleFormat
+          if(typeof regex == 'undefined') regex = '/([^/]+)/';
+          $scope.regex = regex
+
+          $scope.deliberatelyTrustDangerousSnippet = function() {
+            var filtered = $filter('nameExp')(sampleFormat,$scope.regex);
+            var bold = new RegExp('(' + filtered + ')', 'i');
+            $scope.sampleFormat = sampleFormat.replace(bold, '<span style="background-color:yellow">$1</span>');
+            console.log(filtered)
+            console.log($scope.regex)
+               return $sce.trustAsHtml($scope.sampleFormat);
+             };
+
+          $scope.change = function(){
+            console.log("submit")
+            // console.log($parentScope)
+            console.log($scope)
+            changeRegex($scope.regex)
+
+          };
+        }]
+      });
+    };
+
+    var changeRegex = function(regex){
+      $scope.regex = regex
+    }
+
   	$scope.setMethylation = function(include){
   		$scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
       if(include){

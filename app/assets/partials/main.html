@@ -9,11 +9,6 @@
 <div ng-show="showAll">
 
 <h2>HITMAP</h2>
-</svg>
-<div class="input-group">
-Select Identity Cutoff for Calculating Methylation Level:
- <span><input ng-model="identityCutoff" ng-init="identityCutoff = .95" min="0.5" max="1.0" step="0.005" type="range">{{identityCutoff}}</input></span>
-</div>
     <div class="input-group">
     <label>View As</label>
     <div class="switch-toggle well">
@@ -21,8 +16,17 @@ Select Identity Cutoff for Calculating Methylation Level:
       <input type="radio" name="view" id="circle" value="circle" ng-model="view"><label for="circle">Dots</label>
       <a class="btn btn-primary"></a>
     </div>
-    {{view}}
   </div>
+  <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">More Options</button>
+  <hr>
+  <div collapse="!isCollapsed">
+<div class="input-group">
+Select Identity Cutoff for Calculating Methylation Level:
+ <span><input ng-model="identityCutoff" ng-init="identityCutoff = .95" min="0.5" max="1.0" step="0.005" type="range">{{identityCutoff}}</input></span>
+</div>
+  <button class="btn btn-default btn-md" ng-click="changeName(regions, regex)">Change Sequence Read Names By Regex</button>
+</div>
+<br>
 <!-- <table ng-class="{'no-space': view=='square'}">
  -->
  <table>  
@@ -33,31 +37,35 @@ Select Identity Cutoff for Calculating Methylation Level:
           <th>Sample</th>
         </tr>
         <tr ng-repeat="sampleName in allSamples | orderBy">
-          <td style="height:30px; padding: 0px;">{{sampleName}} </td>
+          <td style="height:30px; box-sizing: content-box; border: 0px; padding: 0px !important;">{{sampleName}} </td>
         </tr>
-        <br>
-      </table>
+<!--         <br>
+ -->      </table>
     </td>
     <td ng-repeat="(regionName,region) in regions">
       <table> 
-        <tr><th>{{regionName}}</th>
+        <tr>
+          <th>{{regionName}}</th>
         </tr>
         <tr ng-repeat="(sampleName,sample) in region.samples | orderBy:'sampleName'">
-          <td style="height:25px; padding: 0px;">
+          <td style="height:25px; box-sizing: content-box; border-bottom-color:red; padding: 0px;">
       <a ng-show="sample.analyses.length>0" ng-click="getInfo(sample.analyses)" tooltip="{{getTooltip(sampleName, sample)}}">
       <span ng-show="view=='circle'"><dot samples="sample.analyses" identity-cutoff="identityCutoff"></dot></span>
       <span ng-show="view=='square'"><block samples="sample.analyses" identity-cutoff="identityCutoff"></block></span>
-      </a>
-          <span ng-show="sample.analyses.length==0"><dot></dot></span></td>
+      
+          <span ng-show="sample.analyses.length==0"><dot></dot></span>
+        </a></td>
         </tr>
-        <br>
-      </table>
+<!--         <br>
+ -->      </table>
     </td>
 </tr>
 </table>
 </div>
 <div ng-hide="showAll" id="analysisInfo">
 <button type="button" class="btn btn-default" ng-click="backToOverview()">Back to Overview</button>
+<button class="btn btn-default btn-md" ng-click="python(title)">Get Python Code</button>
+<button class="btn btn-default btn-md" ng-click="rcode(title)">Get R Code</button>
 <br>
 
 <h4>Summary of information for {{title}}</h4>
@@ -90,7 +98,7 @@ Select Identity Cutoff for Calculating Methylation Level:
 </tr>
 <tr ng-repeat="analysis in analyses | orderBy:predicate">
   <td><input ng-model="analysis.include" type="checkbox" ng-change="setMethylation(analysis.include)"></td>
-  <td>{{analysis.sampleName}}</td>
+  <td>{{analysis.sampleName | nameExp:regex }}</td>
   <td>{{analysis.alignment.mismatches}} ({{analysis.alignment.gaps}}) / {{(analysis.alignment.end-analysis.alignment.start)}} ({{analysis.alignmentIdentity*100 | number: 1}})</td>
   <td>{{analysis.methylation.methylated}} ({{analysis.methylation.methylated/(analysis.methylation.methylated+analysis.methylation.unmethylated)*100 | number: 1}})</td>
   <!--<td>{{analysis.bisulfite.unconvertedCpH}} ({{analysis.percentConversion*100 | number: 1}})</td>-->
