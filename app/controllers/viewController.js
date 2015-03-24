@@ -56,6 +56,18 @@ angular.module('app.viewController', ['base64'])
 
     $scope.identityCutoff = .95;
     $scope.title = sampleName + ":" + regionName
+
+    $scope.setMethylation = function(include){
+  		$scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
+      if(include){
+        $scope.included += 1
+        $scope.excluded -= 1
+      }
+      else{
+        $scope.excluded += 1
+        $scope.included -= 1
+      }
+  	}
         
         // if (data.length > 0){
         // $scope.excluded = 0

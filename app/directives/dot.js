@@ -26,10 +26,7 @@ angular.module('dotDirective', [])
         };
         $scope.$watch('identityCutoff', function(newVal, oldVal){
           if (newVal !== oldVal) {
-            $scope.methylation = methylation.getMethylationLevel($scope.samples, newVal).methylationLevel
-            $scope.included = methylation.getMethylationLevel($scope.samples, newVal).included
-            $scope.excluded = methylation.getMethylationLevel($scope.samples, newVal).excluded
-            $scope.radius = getRadius($scope.samples);
+            $render();
             console.log("I got the new value! ", newVal);
           }
       }, true);
@@ -38,6 +35,11 @@ angular.module('dotDirective', [])
             console.log("new methylation")
           // }
         }, true);
+
+             $scope.methylation = methylation.getMethylationLevel($scope.samples, $scope.identityCutoff).methylationLevel
+            $scope.included = methylation.getMethylationLevel($scope.samples, $scope.identityCutoff).included
+            $scope.excluded = methylation.getMethylationLevel($scope.samples, $scope.identityCutoff).excluded
+            $scope.radius = getRadius($scope.samples);
         
     }]
   }

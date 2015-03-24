@@ -14,7 +14,8 @@
     "angular-sanitize": "~1.2.16",
     "angular-bootstrap": "~0.12.1",
     "css-toggle-switch": "~3.1.1",
-    "rickshaw": "~1.5.1"
+    "rickshaw": "~1.5.1",
+    "d3-tip": "~0.6.6"
   },
   "overrides": {
     "rickshaw": {
