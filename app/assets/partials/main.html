@@ -22,7 +22,7 @@
   <div collapse="!isCollapsed">
 <div class="input-group">
 Select Identity Cutoff for Calculating Methylation Level:
- <span><input ng-model="identityCutoff" ng-init="identityCutoff = .95" min="0.5" max="1.0" step="0.005" type="range">{{identityCutoff}}</input></span>
+ <span><input ng-model="identityCutoff" min="0.5" max="1.0" step="0.005" type="range">{{identityCutoff}}</input></span>
 </div>
   <button class="btn btn-default btn-md" ng-click="changeName(regions, regex)">Change Sequence Read Names By Regex</button>
 </div>
@@ -49,7 +49,8 @@ Select Identity Cutoff for Calculating Methylation Level:
         </tr>
         <tr ng-repeat="(sampleName,sample) in region.samples | orderBy:'sampleName'">
           <td style="height:25px; box-sizing: content-box; border-bottom-color:red; padding: 0px;">
-      <a ng-show="sample.analyses.length>0" ng-click="getInfo(sample.analyses)" tooltip="{{getTooltip(sampleName, sample)}}">
+<!--       <a ng-show="sample.analyses.length>0" ng-click="getInfo(sample.analyses)" tooltip="{{getTooltip(sampleName, sample)}}">
+ -->      <a ng-show="sample.analyses.length>0" href="{{link(sampleName, regionName)}}" tooltip="{{getTooltip(sampleName, sample)}}">
       <span ng-show="view=='circle'"><dot samples="sample.analyses" identity-cutoff="identityCutoff"></dot></span>
       <span ng-show="view=='square'"><block samples="sample.analyses" identity-cutoff="identityCutoff"></block></span>
       
@@ -74,7 +75,13 @@ Select Identity Cutoff for Calculating Methylation Level:
 <h5>Number of bisulfite sequences: {{included}} used / {{excluded}} excluded / {{included + excluded}} total</h5>
 <br>
 <h4>Methylation status of each CpG site</h4>
-<div class="table-responsive">
+<methylation id="{{title.split(':')[0]}}" datajson="'sample.json'" 
+                   xaxis-name = "'Year'" 
+                   xaxis-pos = "905"  
+                   yaxis-name = "'Frequency'" 
+                   yaxis-pos = "6" 
+                   d3-format= "',.0f'" ></methylation>
+<!-- <div class="table-responsive">
 <table class="table">
 <tr>
   <th>CpG position</th>
@@ -85,7 +92,7 @@ Select Identity Cutoff for Calculating Methylation Level:
   <td ng-repeat="area in percentMethylation">{{area.m}}/{{area.m+area.u}}<br>{{area.m/(area.m+area.u)*100 | number: 1}}%</td>
 </tr>
 </table>
-</div>
+</div> -->
 <h4>Bisulfite sequence information</h4>
 <table class="table" style="width:auto">
 <tr>
@@ -99,8 +106,8 @@ Select Identity Cutoff for Calculating Methylation Level:
 <tr ng-repeat="analysis in analyses | orderBy:predicate">
   <td><input ng-model="analysis.include" type="checkbox" ng-change="setMethylation(analysis.include)"></td>
   <td>{{analysis.sampleName | nameExp:regex }}</td>
-  <td>{{analysis.alignment.mismatches}} ({{analysis.alignment.gaps}}) / {{(analysis.alignment.end-analysis.alignment.start)}} ({{analysis.alignmentIdentity*100 | number: 1}})</td>
-  <td>{{analysis.methylation.methylated}} ({{analysis.methylation.methylated/(analysis.methylation.methylated+analysis.methylation.unmethylated)*100 | number: 1}})</td>
+  <td>{{analysis.alignment.mismatches}} ({{analysis.alignment.gaps}}) / {{(analysis.alignment.end-analysis.alignment.start+1)}} ({{analysis.alignmentIdentity*100 | number: 1}})</td>
+  <td>{{analysis.methylation.methylated}} ({{analysis.methylation.methylated/(analysis.methylation.reference.length)*100 | number: 1}})</td>
   <!--<td>{{analysis.bisulfite.unconvertedCpH}} ({{analysis.percentConversion*100 | number: 1}})</td>-->
   <td><span ng-repeat="site in analysis.methylation.sequence track by $index"><img height="10px" width="10px" ng-show="site=='M'" src="img/closed_circle.png"/><img  height="10px" width="10px" ng-show="site=='U'" src="img/open_circle.png"/><img  height="10px" width="10px" ng-show="site=='-'" src="img/dash.png"/><img  height="10px" width="10px" ng-show="site=='G' || site=='A' || site=='T'" src="img/x.png"/><img  height="10px" width="10px" ng-show="site=='X' || site=='C' || site=='error'" src="img/red_x.png"/></span></td>
 </tr>

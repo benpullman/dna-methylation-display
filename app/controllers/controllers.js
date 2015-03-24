@@ -6,6 +6,8 @@ angular.module('app.controllers', [])
     $scope.showAll = true;
     $scope.regions = {}; //dictionary of regions
     $scope.allSamples = []; //list of sampleNames
+    $scope.identityCutoff = .95;
+    // console.log("id is "+$routeParams.id)
 
     var load = function(){
       loadData.load().then(function(loaded){
@@ -20,37 +22,15 @@ angular.module('app.controllers', [])
     };
     load();
 
-    // $scope.getMethylationLevel = function(data){
-    //     if (typeof data === "undefined"){
-    //         return 0;
-    //     } else if (data.length > 0){
-    //     $scope.excluded = 0
-    //     $scope.included = 0
-    //     for(i=0;i<data.length;i++){
-    //       data[i].alignmentIdentity = (data[i].alignment.end-data[i].alignment.start-data[i].alignment.mismatches-data[i].alignment.gaps)/(data[i].alignment.end-data[i].alignment.start);
-    //       data[i].percentConversion = data[i].methylation.methylated/(data[i].methylation.methylated+data[i].methylation.unmethylated);
-    //       if (data[i].alignmentIdentity > .95){
-    //         data[i].include = true;
-    //         $scope.included += 1;
-    //       }else{
-    //         $scope.excluded += 1;
-    //       }
-    //     };
-    //     $scope.referenceCpGSites = data[0].methylation.reference
-    //     $scope.referenceLength = data[0].referenceLength
-    //     $scope.analyses = data;
-    //     $scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
-    //     var totalMethylation = 0
-    //     for(var i = 0; i < $scope.percentMethylation.length; i++){
-    //       totalMethylation += $scope.percentMethylation[i]['m']/($scope.percentMethylation[i]['m']+$scope.percentMethylation[i]['u'])
-    //     }
-    //     return (totalMethylation/$scope.percentMethylation.length);
-    //   }
-    //     return 0
-    // };
+    $scope.link = function(sampleName,region){
+      console.log(sampleName)
+      return "#/view/"+$routeParams.id+"/sample/"+sampleName+"--"+region
+    }
+
     $scope.getInfo = function(data){
-        $scope.title = data[0].barcode + ": " + data[0].referenceName
+        $scope.title = data[0].barcode + ":" + data[0].referenceName
         $scope.showAll = false;
+
         
         if (data.length > 0){
         $scope.excluded = 0
@@ -67,8 +47,9 @@ angular.module('app.controllers', [])
         };
         $scope.referenceCpGSites = data[0].methylation.reference
         $scope.referenceLength = data[0].referenceLength
-        $scope.analyses = data;
-        $scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
+        $scope.analyses = data; 
+        // $scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
+        $scope.methylationChart = generateMethylation($scope.referenceCpGSites, $scope.analyses);
       }
     };
     $scope.backToOverview = function(){
@@ -96,19 +77,20 @@ angular.module('app.controllers', [])
   	var generateMethylation = function(refSites,data){
   		var methylationSite = []
   		for(i=0;i<refSites.length;i++){
-  			methylationSite[i] = {'location':refSites[i],'m':0,'u':0}
+  			methylationSite[i] = {'x':refSites[i],'meth':50}
   		}
-  		for(i=0;i<data.length;i++){
-  			if (data[i].include){
-  				for (j=0;j<data[i].methylation.sequence.length;j++){
-  					if (data[i].methylation.sequence[j] == 'M'){
-  						methylationSite[j]['m'] += 1
-  					}else if (data[i].methylation.sequence[j] == 'U'){
-  						methylationSite[j]['u'] += 1
-  					}
-  				}
-  			}
-  		}
+    //   console.log(data)
+  		// for(i=0;i<data.length;i++){
+  		// 	if (data[i].include){
+  		// 		for (j=0;j<data[i].methylation.sequence.length;j++){
+  		// 			if (data[i].methylation.sequence[j] == 'M'){
+  		// 				methylationSite[j]['m'] += 1
+  		// 			}else if (data[i].methylation.sequence[j] == 'U'){
+  		// 				methylationSite[j]['u'] += 1
+  		// 			}
+  		// 		}
+  		// 	}
+  		// }
       console.log("list of methylation?")
       console.log(methylationSite)
   		return methylationSite;

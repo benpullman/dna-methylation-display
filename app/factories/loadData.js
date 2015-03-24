@@ -2,7 +2,7 @@ angular.module('app.loadData', []).
 factory('loadData', ['Resource', '$q', function(Resource, $q) {
 	return{
 		load:
-			function(){
+			function(id){
 				return Resource.get().$promise.then(function(result){
 					var one = "";
 					for(key in result.regions){

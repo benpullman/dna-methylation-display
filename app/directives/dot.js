@@ -24,10 +24,21 @@ angular.module('dotDirective', [])
 
           return radius/4
         };
-        $scope.methylation = methylation.getMethylationLevel($scope.samples, $scope.identityCutoff).methylationLevel
-        $scope.included = methylation.getMethylationLevel($scope.samples, $scope.identityCutoff).included
-        $scope.excluded = methylation.getMethylationLevel($scope.samples, $scope.identityCUtoff).excluded
-        $scope.radius = getRadius($scope.samples);
+        $scope.$watch('identityCutoff', function(newVal, oldVal){
+          if (newVal !== oldVal) {
+            $scope.methylation = methylation.getMethylationLevel($scope.samples, newVal).methylationLevel
+            $scope.included = methylation.getMethylationLevel($scope.samples, newVal).included
+            $scope.excluded = methylation.getMethylationLevel($scope.samples, newVal).excluded
+            $scope.radius = getRadius($scope.samples);
+            console.log("I got the new value! ", newVal);
+          }
+      }, true);
+        $scope.$watch('methylation', function(newVal, oldVal){
+          // if(newVal !== oldVal){
+            console.log("new methylation")
+          // }
+        }, true);
+        
     }]
   }
 });

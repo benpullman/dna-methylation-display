@@ -1,7 +1,50 @@
-<div>
+<button type="button" class="btn btn-default" ng-click="backToOverview()">Back to Overview</button>
+<button class="btn btn-default btn-md" ng-click="python(title)">Get Python Code</button>
+<button class="btn btn-default btn-md" ng-click="rcode(title)">Get R Code</button>
+<br>
 
-Test
-
-{{ regions }}
-
-</div>
+<h4>Summary of information for {{title}}</h4>
+<h5>Length of target genome sequence: {{referenceLength}}</h5>
+<h5>Number of CpG sites: {{referenceCpGSites.length}}
+<h5>Number of bisulfite sequences: {{included}} used / {{excluded}} excluded / {{included + excluded}} total</h5>
+<br>
+<h4>Methylation status of each CpG site</h4>
+<methylation id="methylation" datajson="methylationChart" 
+                   xaxis-name = "'Year'" 
+                   xaxis-pos = "905"  
+                   yaxis-name = "'Frequency'" 
+                   yaxis-pos = "6" 
+                   d3-format= "'.0%'"
+                   region-name = "regionName"
+                   sample-name = "summaryName" ></methylation>
+<!-- <div class="table-responsive">
+<table class="table">
+<tr>
+  <th>CpG position</th>
+  <th ng-repeat="area in percentMethylation">{{area.location}}</th>
+</tr>
+<tr>
+<td>Me-CpG</td>
+  <td ng-repeat="area in percentMethylation">{{area.m}}/{{area.m+area.u}}<br>{{area.m/(area.m+area.u)*100 | number: 1}}%</td>
+</tr>
+</table>
+</div> -->
+<h4>Bisulfite sequence information</h4>
+<table class="table" style="width:auto">
+<tr>
+  <th>Include?</th>
+  <th>Sequence name</th>
+  <th>mismatch (gap) / alignment length<br>(% identity)</th>
+  <th>Me-CpG (%)</th>
+  <!--<th>unconverted (% converted)</th>-->
+  <th>Methylation pattern</th>
+</tr>
+<tr ng-repeat="analysis in analyses | orderBy:predicate">
+  <td><input ng-model="analysis.include" type="checkbox" ng-change="setMethylation(analysis.include)"></td>
+  <td>{{analysis.sampleName | nameExp:regex }}</td>
+  <td>{{analysis.alignment.mismatches}} ({{analysis.alignment.gaps}}) / {{(analysis.alignment.end-analysis.alignment.start+1)}} ({{analysis.alignmentIdentity*100 | number: 1}})</td>
+  <td>{{analysis.methylation.methylated}} ({{analysis.methylation.methylated/(analysis.methylation.reference.length)*100 | number: 1}})</td>
+  <!--<td>{{analysis.bisulfite.unconvertedCpH}} ({{analysis.percentConversion*100 | number: 1}})</td>-->
+  <td><span ng-repeat="site in analysis.methylation.sequence track by $index"><img height="10px" width="10px" ng-show="site=='M'" src="img/closed_circle.png"/><img  height="10px" width="10px" ng-show="site=='U'" src="img/open_circle.png"/><img  height="10px" width="10px" ng-show="site=='-'" src="img/dash.png"/><img  height="10px" width="10px" ng-show="site=='G' || site=='A' || site=='T'" src="img/x.png"/><img  height="10px" width="10px" ng-show="site=='X' || site=='C' || site=='error'" src="img/red_x.png"/></span></td>
+</tr>
+</table>
