@@ -38,17 +38,19 @@ angular.module('methylationChart', []) // Angular Module Name
 
                //  var formatPercent = d3.format(scope.d3Format); // formatting via angular variable
 
-                var x = d3.scale.ordinal()
-                       .rangeRoundBands([0, width], .1);
+                var x = d3.scale.linear()
+                .domain([0, width])
+                .range([0, width]);
 
-               var y = d3.scale.linear()
-                       .range([height, 0]);
+              var y = d3.scale.linear()
+    .domain([0, height])
+    .range([height, 0]);
 
-               var xAxis = d3.svg.axis()
-                       .scale(x)
-                       .orient("bottom");
+               // var xAxis = d3.svg.axis()
+               //         .scale(x)
+               //         .orient("bottom");
 
-                     var svg = d3.select(elem[0]).append("svg") // selecting the DOM element by d3.js 
+                var svg = d3.select(elem[0]).append("svg") // selecting the DOM element by d3.js 
                                                                  // - getting from Angular context   
                    .attr("width", width + margin.left + margin.right) //100%
                    // .attr("height", height + margin.top + margin.bottom) //100
@@ -56,12 +58,12 @@ angular.module('methylationChart', []) // Angular Module Name
                    .append("g")
                    .call(d3.behavior.zoom().x(x).y(y).scaleExtent([1, 8]).on("zoom", zoom));
 
-                                    
 
                   var g = svg.selectAll('g')
  
-                  var block = g.data(scope.datajson)
-                      .enter()
+                  // var block = g.data(scope.datajson)
+                  //     .enter()
+                  var block = svg.selectAll("rect").data(scope.datajson).enter()
 
                   var aTest = function (i) {
                       return i / 100;
@@ -71,38 +73,41 @@ angular.module('methylationChart', []) // Angular Module Name
                       .attr({
                       height: 40,
                       width: 10,
-                      x: function (d) {
-                          return 3 * d.x
-                      },
-                      y: 50,
+                      // x: function (d) {
+                      //     return 3 * d.x
+                      // },
+                      // y: 50,
                       fill: 'red',
                       opacity: function (d) {
                           return aTest(d.meth)
-                      }
-
-                  });
-
-                  block.append('rect')
-                      .attr({
-                      height: 40,
-                      width: 10,
-                      x: function (d) {
-                          return 3 * d.x
                       },
-                      y: 50,
-                      fill: 'blue',
-                          opacity: function(d){
-                              return 1-aTest(d.meth)
-                          }
+                      transform: transform
+
 
                   });
-                    function zoom() {
+
+                  // block.append('rect')
+                  //     .attr({
+                  //     height: 40,
+                  //     width: 10,
+                  //     // x: function (d) {
+                  //     //     return 3 * d.x
+                  //     // },
+                  //     // y: 50,
+                  //     fill: 'blue',
+                  //     opacity: function(d){
+                  //         return 1-aTest(d.meth)
+                  //     },
+                  //     transform: transform
+                  // });
+
+              function zoom() {
                 console.log("zooming")
                 block.attr("transform", transform);
               }
 
               function transform(d) {
-                return "translate(" + x(d[0]) + "," + y(d[1]) + ")";
+                return "translate(" + d.x + "," + y(50) + ")";
               }
         // console.log(loaded);
                     var regions = loaded.all.regions; 
