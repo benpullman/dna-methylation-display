@@ -160,9 +160,9 @@ angular.module('methylationChart', []) // Angular Module Name
 
         function transform(d, i) {
           if(!scope.whitespace)
-          return "translate(" + x(i) + "," + y(70) + ") scale(" + zzzm.scale()/10 + "," + 1 + ")";
+          return "translate(" + x(i) + "," + y(70) + ")";
           else{
-            return "translate(" + x(d.x) + "," + y(70) + ");
+            return "translate(" + x(d.x) + "," + y(70) + ") scale(" + zzzm.scale()/10 + "," + 1 + ")";
           }
         }
 

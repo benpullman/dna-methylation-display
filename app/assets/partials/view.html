@@ -9,6 +9,7 @@
 <h5>Number of bisulfite sequences: {{included}} used / {{excluded}} excluded / {{included + excluded}} total</h5>
 <br>
 <h4>Methylation status of each CpG site</h4>
+
 <methylation id="methylation" datajson="methylationChart" 
                    height = "100" 
                    width = "960"  
@@ -20,6 +21,17 @@
                    included = "included"
                    show-numbers = "true"
                    whitespace = "true" ></methylation>
+<methylation id="methylation" datajson="methylationChart" 
+                   height = "100" 
+                   width = "960"  
+                   yaxis-name = "'Frequency'" 
+                   yaxis-pos = "6" 
+                   d3-format= "'.0%'"
+                   region-name = "regionName"
+                   sample-name = "summaryName"
+                   included = "included"
+                   show-numbers = "false"
+                   whitespace = "false" ></methylation>
 <!-- <div class="table-responsive">
 <table class="table">
 <tr>
