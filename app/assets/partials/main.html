@@ -9,20 +9,35 @@
 <div ng-show="showAll">
 
 <h2>HITMAP</h2>
-    <div class="input-group">
+    <div class="row">
+      <div class="col-lg-4">
     <label>View As</label>
-    <div class="switch-toggle well">
-      <input type="radio" name="view" id="square" value="square" ng-init="view = 'square'" ng-model="view"><label for="square">Lines</label>
-      <input type="radio" name="view" id="circle" value="circle" ng-model="view"><label for="circle">Dots</label>
+    <div class="switch-toggle switch-3 well">
+      <input type="radio" name="view" id="square" value="square" ng-init="view = 'square'" ng-model="view"><label for="square" onclick="">Lines</label>
+      <input type="radio" name="view" id="circle" value="circle" ng-model="view"><label for="circle" onclick>Dots</label>
+      <input type="radio" name="view" id="chart" value="chart" ng-model="view"><label for="chart" onclick>Grid</label>
       <a class="btn btn-primary"></a>
     </div>
+  </div>
+  <div class="col-lg-4">
+    <label>Table Options</label>
+    <div class="switch-toggle well">
+      <input type="radio" name="tview" id="space" value="space" ng-model="tview" checked>
+      <label onclick="" for="space">Spaces</label>
+      <input type="radio" name="tview" id="nospace" value="nospace" ng-model="tview">
+      <label for="nospace" onclick="">No Space</label>
+            <a class="btn btn-primary"></a>
+
+    </div>
+  </div>
   </div>
   <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">More Options</button>
   <hr>
   <div collapse="!isCollapsed">
+      
 <div class="input-group">
 Select Identity Cutoff for Calculating Methylation Level:
- <span><input ng-model="identityCutoff" min="0.5" max="1.0" step="0.005" type="range">{{identityCutoff}}</input></span>
+ <span><input ng-model="identityCutoff" ng-change="setIdentityCutoff()" min="0.5" max="1.0" step="0.005" type="range">{{identityCutoff}}</input></span>
 </div>
   <button class="btn btn-default btn-md" ng-click="changeName(regions, regex)">Change Sequence Read Names By Regex</button>
 </div>
@@ -53,6 +68,17 @@ Select Identity Cutoff for Calculating Methylation Level:
  -->      <a ng-show="sample.analyses.length>0" href="{{link(sampleName, regionName)}}" tooltip="{{getTooltip(sampleName, sample)}}">
       <span ng-show="view=='circle'"><dot samples="sample.analyses" identity-cutoff="identityCutoff"></dot></span>
       <span ng-show="view=='square'"><block samples="sample.analyses" identity-cutoff="identityCutoff"></block></span>
+      <span ng-show="view=='chart'"><!-- <methylation id="methylation" datajson="methylationChart" 
+                   height = "10" 
+                   width = "30"  
+                   yaxis-name = "'Frequency'" 
+                   yaxis-pos = "6" 
+                   d3-format= "'.0%'"
+                   region-name = "regionName"
+                   sample-name = "sampleName"
+                   included = "included"
+                   show-numbers = "false"
+                   whitespace = "false" ></methylation> --></span>
       
           <span ng-show="sample.analyses.length==0"><dot></dot></span>
         </a></td>

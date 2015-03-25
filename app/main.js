@@ -8,6 +8,7 @@ require('services/resource');
 require('services/user');
 require('factories/methylation');
 require('factories/loadData');
+require('factories/setter');
 require('filters/nameExp');
 require('filters/markdown');
 require('directives/dot');
@@ -18,7 +19,7 @@ require('directives/methylationChart')
 angular.module('app', ['ngRoute','ngCookies','ui.bootstrap',
 	'app.controllers','app.submitController','angularFileUpload','app.userController','app.viewController',
 	'app.testController',
-	'app.methylation', 'app.loadData',
+	'app.methylation', 'app.loadData', 'app.set',
 	'app.services.resource','app.services.user','nameExp','markdown','dotDirective','blockDirective','methylationChart']).
 config(['$routeProvider','$locationProvider',function($routeProvider,$locationProvider) {
   $routeProvider.when('/', {templateUrl: 'partials/welcome.html', controller: 'UserController'});

@@ -1,5 +1,5 @@
 angular.module('app.viewController', ['base64'])
-  .controller('ViewController', ['$scope','$routeParams', '$location','loadData',function($scope,$routeParams, $location, loadData) {
+  .controller('ViewController', ['$scope','$routeParams', '$location','loadData','$modal', 'setter', function($scope,$routeParams, $location, loadData, $modal, setter) {
     var routeName = $routeParams.sample.split('--')
     $scope.routeName = routeName
     var sampleName = routeName[0]
@@ -7,10 +7,32 @@ angular.module('app.viewController', ['base64'])
     var regionName = routeName[1]
     $scope.regionName = regionName
     console.log(regionName)
-    var load = function(){
-      loadData.load().then(function(loaded){
-        // console.log(loaded);
-        $scope.regions = loaded.all.regions; 
+
+    $scope.identityCutoff = setter.getCutoff()
+    console.log("after getting, identity cutoff is "+$scope.identityCutoff)
+    $scope.regex = setter.getRegex()
+
+    var loaded = setter.getMethylation();
+    console.log(loaded)
+
+    if(typeof loaded == 'undefined' || !loaded){
+    	console.log("loading into memory")
+          	runLoad();
+      }
+      else{
+      	format(loaded);
+      }
+
+    function runLoad(){
+
+    	loadData.load().then(function(loaded){
+    		format(loaded);
+    	});
+
+    };
+
+    function format(loaded){
+    	$scope.regions = loaded.all.regions; 
         console.log(loaded.all.regions);
         $scope.allSamples = loaded.sampleNames;
         var data = $scope.regions[regionName].samples[sampleName].analyses
@@ -32,13 +54,9 @@ angular.module('app.viewController', ['base64'])
         // $scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
         $scope.methylationChart = generateMethylation($scope.referenceCpGSites, $scope.analyses);
         console.log($scope.methylationChart)
-      })
-      .catch(function(error){
-        alert("error loading methylation data. Please try again")
-      });
-    };
+    }
 
-    var generateMethylation = function(refSites,data){
+    function generateMethylation(refSites,data){
   		var methylationSite = []
   		for(i=0;i<refSites.length;i++){
   			methylationSite[i] = {'x':refSites[i],'meth':50}
@@ -48,13 +66,9 @@ angular.module('app.viewController', ['base64'])
   		return methylationSite;
   	}
 
-    load();
-
     $scope.backToOverview = function(){
       $location.path('view/'+$routeParams.id)
     };
-
-    $scope.identityCutoff = .95;
     $scope.title = sampleName + ":" + regionName
 
     $scope.setMethylation = function(include){
@@ -68,6 +82,32 @@ angular.module('app.viewController', ['base64'])
         $scope.included -= 1
       }
   	}
+
+  	$scope.python = function(sample){
+      $modal.open({
+        templateUrl: 'partials/modal/python.html',
+        size: 'md',
+        controller: ['$scope', '$modalInstance', function($scope, $modalInstance){
+          $scope.change = function(){
+            console.log("submitted")
+          };
+        }]
+      });
+
+    }
+
+    $scope.r = function(sample){
+      $modal.open({
+        templateUrl: 'partials/modal/python.html',
+        size: 'md',
+        controller: ['$scope', '$modalInstance', function($scope, $modalInstance){
+          $scope.change = function(){
+            console.log("submitted")
+          };
+        }]
+      });
+
+    }
         
         // if (data.length > 0){
         // $scope.excluded = 0

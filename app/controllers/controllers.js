@@ -2,7 +2,7 @@
 /* Controllers */
 
 angular.module('app.controllers', [])
-  .controller('MainController', ['$scope','$routeParams','$filter','loadData','methylation', '$modal', '$sce', function($scope,$routeParams,$filter, loadData, methylation, $modal, $sce) {
+  .controller('MainController', ['$scope','$routeParams','$filter','loadData','methylation', '$modal', '$sce', 'setter', function($scope,$routeParams,$filter, loadData, methylation, $modal, $sce, setter) {
     $scope.showAll = true;
     $scope.regions = {}; //dictionary of regions
     $scope.allSamples = []; //list of sampleNames
@@ -15,6 +15,7 @@ angular.module('app.controllers', [])
         $scope.regions = loaded.all.regions; 
         console.log(loaded.all.regions);
         $scope.allSamples = loaded.sampleNames;
+        setter.setMethylation(loaded)
       })
       .catch(function(error){
         alert("error loading methylation data. Please try again")
@@ -23,7 +24,7 @@ angular.module('app.controllers', [])
     load();
 
     $scope.link = function(sampleName,region){
-      console.log(sampleName)
+      // console.log(sampleName)
       return "#/view/"+$routeParams.id+"/sample/"+sampleName+"--"+region
     }
 
@@ -52,22 +53,6 @@ angular.module('app.controllers', [])
         $scope.methylationChart = generateMethylation($scope.referenceCpGSites, $scope.analyses);
       }
     };
-    $scope.backToOverview = function(){
-      $scope.showAll = true
-    };
-
-    $scope.python = function(sample){
-      $modal.open({
-        templateUrl: 'partials/modal/python.html',
-        size: 'md',
-        controller: ['$scope', '$modalInstance', function($scope, $modalInstance){
-          $scope.change = function(){
-            console.log("submitted")
-          };
-        }]
-      });
-
-    }
 
     $scope.getTooltip = function(sampleName,sample){
       return "Sample "+sampleName+" for CpG island "+sample.analyses[0].referenceName+"\nRead Depth: "+sample.analyses.length+
@@ -79,6 +64,7 @@ angular.module('app.controllers', [])
   		for(i=0;i<refSites.length;i++){
   			methylationSite[i] = {'x':refSites[i],'meth':50}
   		}
+
     //   console.log(data)
   		// for(i=0;i<data.length;i++){
   		// 	if (data[i].include){
@@ -143,6 +129,12 @@ angular.module('app.controllers', [])
       console.log("changed!")
       console.log(regex)
       $scope.regex = regex
+      setter.setRegex(regex)
+    }
+
+    $scope.setIdentityCutoff = function(){
+      setter.setCutoff($scope.identityCutoff)
+      console.log("setter")
     }
 
   	$scope.setMethylation = function(include){
