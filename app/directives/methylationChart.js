@@ -96,11 +96,13 @@ angular.module('methylationChart', []) // Angular Module Name
               .domain([0, height])
               .range([height, 0]);
 
+              var zzzm = d3.behavior.zoom().x(x).scaleExtent([1, 8]).on("zoom", zoom)
+
               var svg = d3.select(elem[0]).append("svg")
               .attr("width", width)
               .attr("height", height)
               .append("g")
-              .call(d3.behavior.zoom().x(x).scaleExtent([1, 8]).on("zoom", zoom));
+              .call(zzzm);
 
               svg.append("rect")
               .attr("class", "overlay")
@@ -160,14 +162,14 @@ angular.module('methylationChart', []) // Angular Module Name
           if(!scope.whitespace)
           return "translate(" + x(i) + "," + y(70) + ")";
           else{
-            return "translate(" + x(d.x) + "," + y(70) + ")";
+            return "translate(" + x(d.x) + "," + y(70) + ") scale(" + zzzm.scale()/10 + "," + 1 + ")";
           }
         }
 
         function transformText(d,i) {
 
           if(!scope.whitespace)
-          return "translate(" + x(i+1) + "," + y(35) + ")";
+          return "translate(" + x(i+.5) + "," + y(35) + ")";
           else{
             return "translate(" + x(d.x+1) + "," + y(35) + ")";
           }
