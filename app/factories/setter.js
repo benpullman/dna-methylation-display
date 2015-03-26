@@ -1,7 +1,7 @@
 angular.module('app.set', []).factory('setter', function() {
- var identityCutoff = .95;
- var regex = ""
- var methylation
+ var identityCutoff;
+ var regex;
+ var methylation;
 
  function setCutoff(data) {
    identityCutoff = data;

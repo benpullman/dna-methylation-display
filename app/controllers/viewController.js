@@ -7,10 +7,10 @@ angular.module('app.viewController', ['base64'])
     var regionName = routeName[1]
     $scope.regionName = regionName
     console.log(regionName)
+    $scope.view = 'true'
 
-    $scope.identityCutoff = setter.getCutoff()
-    console.log("after getting, identity cutoff is "+$scope.identityCutoff)
-    $scope.regex = setter.getRegex()
+    $scope.identityCutoff = setter.getCutoff() ? setter.getCutoff() : .95
+    $scope.regex = setter.getRegex() ? setter.getRegex() : "(.*)"
 
     var loaded = setter.getMethylation();
     console.log(loaded)
@@ -20,9 +20,14 @@ angular.module('app.viewController', ['base64'])
           	runLoad();
       }
       else{
+      	console.log("got from memory")
       	format(loaded);
       }
 
+     $scope.testing = function(view){
+     	console.log(view)
+     	console.log(typeof view)
+     }
     function runLoad(){
 
     	loadData.load().then(function(loaded){
@@ -53,17 +58,48 @@ angular.module('app.viewController', ['base64'])
         $scope.analyses = data; 
         // $scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
         $scope.methylationChart = generateMethylation($scope.referenceCpGSites, $scope.analyses);
-        console.log($scope.methylationChart)
+        console.log("let's go")
     }
 
     function generateMethylation(refSites,data){
+  		var methChart = []
   		var methylationSite = []
   		for(i=0;i<refSites.length;i++){
-  			methylationSite[i] = {'x':refSites[i],'meth':50}
+  			methylationSite[i] = {'m': 0, 'u':0}
   		}
 
-      console.log("list of methylation?")
-  		return methylationSite;
+    //   console.log("list of methylation?")
+  		// return methylationSite;
+  		// console.log(data)
+  		for(i=0;i<data.length;i++){
+  			if (data[i].include){
+  				for (j=0;j<data[i].methylation.sequence.length;j++){
+  					if (data[i].methylation.sequence[j] == 'M'){
+  						methylationSite[j]['m'] += 1
+  					}else if (data[i].methylation.sequence[j] == 'U'){
+  						methylationSite[j]['u'] += 1
+  					}
+  				}
+  			}
+  		}
+
+  		for(i=0; i<refSites.length;i++){
+            var denom = 0;
+            var num = 0;
+            if(methylationSite[i]['m']+methylationSite[i]['u'] == 0){
+              denom = 1
+            }
+            else{
+              denom = methylationSite[i]['m']+methylationSite[i]['u']
+            }
+
+            num = methylationSite[i]['m']
+
+            methChart[i] = {'x': refSites[i], 'meth':num/denom * 100, 'mRatio': num + '/' + (methylationSite[i]['m']+methylationSite[i]['u'])}
+          }
+
+  		console.log(methChart)
+        return methChart
   	}
 
     $scope.backToOverview = function(){
@@ -72,7 +108,7 @@ angular.module('app.viewController', ['base64'])
     $scope.title = sampleName + ":" + regionName
 
     $scope.setMethylation = function(include){
-  		$scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
+  		$scope.methylationChart = generateMethylation($scope.referenceCpGSites,$scope.analyses);
       if(include){
         $scope.included += 1
         $scope.excluded -= 1
@@ -98,7 +134,7 @@ angular.module('app.viewController', ['base64'])
 
     $scope.r = function(sample){
       $modal.open({
-        templateUrl: 'partials/modal/python.html',
+        templateUrl: 'partials/modal/r.html',
         size: 'md',
         controller: ['$scope', '$modalInstance', function($scope, $modalInstance){
           $scope.change = function(){

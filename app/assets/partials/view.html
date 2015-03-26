@@ -9,7 +9,17 @@
 <h5>Number of bisulfite sequences: {{included}} used / {{excluded}} excluded / {{included + excluded}} total</h5>
 <br>
 <h4>Methylation status of each CpG site</h4>
-
+  <div class="col-lg-4">
+    <label>Table Options</label>
+	<div class="switch-toggle well">
+	      <input type="radio" name="view" id="whitespace" value="true" ng-model="view" checked>
+	      <label ng-click="testing(view)" for="whitespace">Whitespace</label>
+	      <input type="radio" name="view" id="nospace" value="false" ng-model="view">
+	      <label for="nospace">No Space</label>
+	            <a class="btn btn-primary"></a>
+	 </div>
+   </div>
+<div ng-show="view == 'true'">
 <methylation id="methylation" datajson="methylationChart" 
                    height = "100" 
                    width = "960"  
@@ -20,7 +30,9 @@
                    sample-name = "summaryName"
                    included = "included"
                    show-numbers = "true"
-                   whitespace = "true" ></methylation>
+                   whitespace = "true"
+                   identity-cutoff = "identityCutoff" ></methylation></div>
+<div ng-show="view == 'false'">
 <methylation id="methylation" datajson="methylationChart" 
                    height = "100" 
                    width = "960"  
@@ -31,7 +43,8 @@
                    sample-name = "summaryName"
                    included = "included"
                    show-numbers = "false"
-                   whitespace = "false" ></methylation>
+                   whitespace = "false"
+                   identity-cutoff = "identityCutoff" ></methylation></div>
 <!-- <div class="table-responsive">
 <table class="table">
 <tr>
@@ -49,7 +62,9 @@
 <tr>
   <th>Include?</th>
   <th>Sequence name</th>
-  <th>mismatch (gap) / alignment length<br>(% identity)</th>
+  <th>mismatches (gaps)</th>
+  <th>alignment length</th>
+  <th>alignment % identity</th>
   <th>Me-CpG (%)</th>
   <!--<th>unconverted (% converted)</th>-->
   <th>Methylation pattern</th>
@@ -57,8 +72,10 @@
 <tr ng-repeat="analysis in analyses | orderBy:predicate">
   <td><input ng-model="analysis.include" type="checkbox" ng-change="setMethylation(analysis.include)"></td>
   <td>{{analysis.sampleName | nameExp:regex }}</td>
-  <td>{{analysis.alignment.mismatches}} ({{analysis.alignment.gaps}}) / {{(analysis.alignment.end-analysis.alignment.start+1)}} ({{analysis.alignmentIdentity*100 | number: 1}})</td>
-  <td>{{analysis.methylation.methylated}} ({{analysis.methylation.methylated/(analysis.methylation.reference.length)*100 | number: 1}})</td>
+  <td>{{analysis.alignment.mismatches + analysis.alignment.gaps}} ({{analysis.alignment.gaps}})</td> <!-- to ben: server side can change mismatches to include gaps so then will not have to add to get mismatches including gaps -->
+  <td> {{(analysis.alignment.end-analysis.alignment.start+1)}}</td>
+  <td>{{analysis.alignmentIdentity*100 | number: 1}}</td>
+  <td>{{analysis.methylation.methylated}} ({{analysis.methylation.methylated/(analysis.methylation.methylated + analysis.methylation.unmethylated)*100 | number: 1}})</td>
   <!--<td>{{analysis.bisulfite.unconvertedCpH}} ({{analysis.percentConversion*100 | number: 1}})</td>-->
   <td><span ng-repeat="site in analysis.methylation.sequence track by $index"><img height="10px" width="10px" ng-show="site=='M'" src="img/closed_circle.png"/><img  height="10px" width="10px" ng-show="site=='U'" src="img/open_circle.png"/><img  height="10px" width="10px" ng-show="site=='-'" src="img/dash.png"/><img  height="10px" width="10px" ng-show="site=='G' || site=='A' || site=='T'" src="img/x.png"/><img  height="10px" width="10px" ng-show="site=='X' || site=='C' || site=='error'" src="img/red_x.png"/></span></td>
 </tr>

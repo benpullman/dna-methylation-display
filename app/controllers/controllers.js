@@ -6,11 +6,13 @@ angular.module('app.controllers', [])
     $scope.showAll = true;
     $scope.regions = {}; //dictionary of regions
     $scope.allSamples = []; //list of sampleNames
-    $scope.identityCutoff = .95;
-    // console.log("id is "+$routeParams.id)
+    $scope.identityCutoff = setter.getCutoff() ? setter.getCutoff() : .95;
+    $scope.regex = setter.getRegex() //leave undefined
 
     var load = function(){
+          // console.log("id is "+$routeParams.id) //pass in eventually
       loadData.load().then(function(loaded){
+
         // console.log(loaded);
         $scope.regions = loaded.all.regions; 
         console.log(loaded.all.regions);
@@ -118,7 +120,8 @@ angular.module('app.controllers', [])
             console.log("submit")
             // console.log($parentScope)
             console.log($scope)
-            changeRegex($scope.regex)
+            changeRegex($scope.regex);
+            $modalInstance.close();
 
           };
         }]
