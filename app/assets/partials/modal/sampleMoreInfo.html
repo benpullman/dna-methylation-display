@@ -1,0 +1,33 @@
+<div class="modal-header">
+<h4 class="modal-title">More Information</h4></div>
+<div class="modal-body">
+	<div>
+	<b>Sample Name</b>
+	<p>{{read.sampleName | nameExp:regex }}</p>
+	</div>
+	<div>
+	<b>Mismatches</b>
+	<p>{{read.alignment.mismatches + read.alignment.gaps}} </p><!-- to ben: server side can change mismatches to include gaps so then will not have to add to get mismatches including gaps -->
+	</div>
+	<div>
+	<b>Gaps</b>
+	<p>{{read.alignment.gaps}}</p> 
+	</div>
+	<div>
+	<b>Alignment Length</b>
+	<p>  {{(read.alignment.end-read.alignment.start+1)}}</p>
+	</div>
+	<div>
+	<b>Alignment Identity</b>
+  <p>{{read.alignmentIdentity*100 | number: 1}}</p>
+	</div>
+	<div>
+	<b>Methylated CpG %</b>
+	  <p>{{read.methylation.methylated}} ({{read.methylation.methylated/(read.methylation.methylated + read.methylation.unmethylated)*100 | number: 1}})</p>
+	</div>
+	<div>
+	<b>Methylation Pattern</b>
+	</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-default" ng-click="$close(result)" data-dismiss="modal">Close</button>
+</div>

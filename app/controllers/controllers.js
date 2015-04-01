@@ -139,18 +139,6 @@ angular.module('app.controllers', [])
       setter.setCutoff($scope.identityCutoff)
       console.log("setter")
     }
-
-  	$scope.setMethylation = function(include){
-  		$scope.percentMethylation = generateMethylation($scope.referenceCpGSites,$scope.analyses);
-      if(include){
-        $scope.included += 1
-        $scope.excluded -= 1
-      }
-      else{
-        $scope.excluded += 1
-        $scope.included -= 1
-      }
-  	}
   	
     $scope.predicate = '1-(methylation.methylatedCpGSites/(methylation.methylatedCpGSites+methylation.cpGSites))'
   	$scope.includePredicate = 'include'

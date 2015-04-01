@@ -109,6 +109,7 @@ angular.module('app.viewController', ['base64'])
 
     $scope.setMethylation = function(include){
   		$scope.methylationChart = generateMethylation($scope.referenceCpGSites,$scope.analyses);
+      console.log("now is "+include)
       if(include){
         $scope.included += 1
         $scope.excluded -= 1
@@ -118,6 +119,22 @@ angular.module('app.viewController', ['base64'])
         $scope.included -= 1
       }
   	}
+
+    $scope.moreInfo = function(read){
+      $modal.open({
+        templateUrl: 'partials/modal/sampleMoreInfo.html',
+        size: 'md',
+        resolve: {
+          read: function() {
+            return read;
+          }
+        },
+        controller: ['$scope', '$modalInstance', 'read', function($scope, $modalInstance, read){
+          $scope.read = read;
+          console.log($scope.read)
+        }]
+      });
+    }
 
   	$scope.python = function(sample){
       $modal.open({

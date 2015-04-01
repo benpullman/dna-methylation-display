@@ -58,25 +58,6 @@
 </table>
 </div> -->
 <h4>Bisulfite sequence information</h4>
-<table class="table" style="width:auto">
-<tr>
-  <th>Include?</th>
-  <th>Sequence name</th>
-  <th>mismatches (gaps)</th>
-  <th>alignment length</th>
-  <th>alignment % identity</th>
-  <th>Me-CpG (%)</th>
-  <!--<th>unconverted (% converted)</th>-->
-  <th>Methylation pattern</th>
-</tr>
-<tr ng-repeat="analysis in analyses | orderBy:predicate">
-  <td><input ng-model="analysis.include" type="checkbox" ng-change="setMethylation(analysis.include)"></td>
-  <td>{{analysis.sampleName | nameExp:regex }}</td>
-  <td>{{analysis.alignment.mismatches + analysis.alignment.gaps}} ({{analysis.alignment.gaps}})</td> <!-- to ben: server side can change mismatches to include gaps so then will not have to add to get mismatches including gaps -->
-  <td> {{(analysis.alignment.end-analysis.alignment.start+1)}}</td>
-  <td>{{analysis.alignmentIdentity*100 | number: 1}}</td>
-  <td>{{analysis.methylation.methylated}} ({{analysis.methylation.methylated/(analysis.methylation.methylated + analysis.methylation.unmethylated)*100 | number: 1}})</td>
-  <!--<td>{{analysis.bisulfite.unconvertedCpH}} ({{analysis.percentConversion*100 | number: 1}})</td>-->
-  <td><span ng-repeat="site in analysis.methylation.sequence track by $index"><img height="10px" width="10px" ng-show="site=='M'" src="img/closed_circle.png"/><img  height="10px" width="10px" ng-show="site=='U'" src="img/open_circle.png"/><img  height="10px" width="10px" ng-show="site=='-'" src="img/dash.png"/><img  height="10px" width="10px" ng-show="site=='G' || site=='A' || site=='T'" src="img/x.png"/><img  height="10px" width="10px" ng-show="site=='X' || site=='C' || site=='error'" src="img/red_x.png"/></span></td>
-</tr>
-</table>
+
+<div class="col-md-2" ng-repeat="analysis in analyses | orderBy:predicate"><br><label class="btn btn-success" ng-model="analysis.include" ng-click="setMethylation(!analysis.include)" ng-dblclick="moreInfo(analysis)" btn-checkbox>
+{{analysis.alignmentIdentity*100 | number: 1}} | {{analysis.methylation.methylated/(analysis.methylation.methylated + analysis.methylation.unmethylated)*100 | number: 1}}</label></div>
