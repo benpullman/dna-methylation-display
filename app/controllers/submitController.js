@@ -23,11 +23,11 @@ angular.module('app.submitController', [])
 	};
     $scope.submitForm = function() {
     	var toSubmit = {}
-    	toSubmit['name'] = $scope.name;
-    	toSubmit['email'] = $scope.email;
+    	// toSubmit['name'] = $scope.name;
+    	// toSubmit['email'] = $scope.email;
     	toSubmit['dna'] = $scope.fasta;
-    	toSubmit['references'] = $scope.ref;
-    	toSubmit['map'] = $scope.map;
+    	// toSubmit['references'] = $scope.ref;
+    	// toSubmit['map'] = $scope.map;
     	Resource.add(toSubmit,function(success){
     		alert("Job submitted successfully.")
     	},function(error){

@@ -45,7 +45,7 @@ angular.module('methylationChart', []) // Angular Module Name
                   .range([0, width]);
 
                   var y = d3.scale.linear()
-                  .domain([0, height])
+                  .domain([-10, height])
                   .range([height, 0]);
 
                   var zzzm = d3.behavior.zoom().x(x).scaleExtent([1, 8]).on("zoom", zoom)

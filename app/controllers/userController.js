@@ -1,5 +1,5 @@
 angular.module('app.userController', [])
-  .controller('UserController', ['$scope','User',function($scope,User) {
+  .controller('UserController', ['$scope','User','Resource','$http',function($scope,User,Resource,$http) {
     $scope.initialView = true
     var initUser = function(user) {
         $scope.user = user
@@ -64,11 +64,45 @@ angular.module('app.userController', [])
         });
     };
     $scope.submitForm = function() {
-        User.add({id:$scope.user.id,command:"analyses", "name":$scope.name,"ref":$scope.selectRef.id,"map":$scope.selectMap.id},$scope.fasta, function(success){
-            alert("Submitted!")
-        },function(error){
-            alert(error);
+        // User.add({id:$scope.user.id,command:"analyses", "name":$scope.name,"ref":$scope.selectRef.id,"map":$scope.selectMap.id},$scope.fasta, function(success){
+        //     alert("Submitted!")
+        // },function(error){
+        //     alert(error);
+        // });
+        // var toSubmit = {}
+        //     // toSubmit['name'] = $scope.name;
+        //     // toSubmit['email'] = $scope.email;
+        // toSubmit['dna'] = $scope.fasta;
+        // console.log($scope.fasta)
+        // // toSubmit['references'] = $scope.ref;
+        // // toSubmit['map'] = $scope.map;
+        // Resource.add(toSubmit,function(success){
+        //     alert("Job submitted successfully.")
+        // },function(error){
+        //     alert("Error in submition, please try again.")
+        // });
+        var fd = new FormData();
+        fd.append('bar', 'other');
+        fd.append('foo', $scope.fasta);
+        $http.post('/api/', fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(){
+        })
+        .error(function(){
         });
+        // $http({
+        //     method:'POST',
+        //     url:'/api/',
+        //     headers: {'Content-Type': 'multipart/form-data'},
+        //     //transformRequest: angular.identity,
+        //     data: $scope.fasta
+        //   }).success(function(d){
+
+        //   }).error(function(e){
+
+        //   });
     }
     $scope.fastaSelect = function($files) {
         var reader = new FileReader();
