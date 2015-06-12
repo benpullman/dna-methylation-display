@@ -6,7 +6,7 @@ angular.module('app.controllers', [])
     $scope.showAll = true;
     $scope.regions = {}; //dictionary of regions
     $scope.allSamples = []; //list of sampleNames
-    $scope.identityCutoff = setter.getCutoff() ? setter.getCutoff() : .95;
+    $scope.identityCutoff = setter.getCutoff() ? setter.getCutoff() : .90;
     $scope.regex = setter.getRegex() //leave undefined
 
     var load = function(){
