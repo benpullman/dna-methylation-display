@@ -58,6 +58,6 @@
 </table>
 </div> -->
 <h4>Bisulfite sequence information</h4>
-
-<div class="col-md-2" ng-repeat="analysis in analyses | orderBy:predicate"><br><label class="btn" ng-class="analysis.include ? 'btn-success': 'btn-default'" ng-model="analysis.include" ng-click="setMethylation(!analysis.include)" ng-dblclick="moreInfo(analysis)" btn-checkbox>
+<div class="col-md-2" ng-repeat="analysis in analyses"><br><label class="btn" ng-class="analysis.check ? 'btn-success': 'btn-default'" ng-model="analysis.check" ng-click="setMethylation($index)" ng-dblclick="moreInfo(analysis)" btn-checkbox>
+<!-- <div class="col-md-2" ng-repeat="analysis in analyses | orderBy:predicate"><br><label class="btn" ng-class="analysis.include ? 'btn-success': 'btn-default'" ng-model="analysis.include" ng-click="setMethylation(!analysis.include)" ng-dblclick="moreInfo(analysis)" btn-checkbox> -->
 {{analysis.alignmentIdentity*100 | number: 1}} | {{analysis.methylation.methylated/(analysis.methylation.methylated + analysis.methylation.unmethylated)*100 | number: 1}}</label></div>

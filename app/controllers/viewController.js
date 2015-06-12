@@ -107,10 +107,27 @@ angular.module('app.viewController', ['base64'])
     };
     $scope.title = sampleName + ":" + regionName
 
-    $scope.setMethylation = function(include){
-  		$scope.methylationChart = generateMethylation($scope.referenceCpGSites,$scope.analyses);
-      console.log("now is "+include)
-      if(include){
+   //  $scope.setMethylation = function(include){
+  	// 	$scope.methylationChart = generateMethylation($scope.referenceCpGSites,$scope.analyses);
+   //    console.log("now is "+include)
+   //    if(include){
+   //      $scope.included += 1
+   //      $scope.excluded -= 1
+   //    }
+   //    else{
+   //      $scope.excluded += 1
+   //      $scope.included -= 1
+   //    }
+  	// }
+    $scope.setMethylation = function(index){
+      console.log($scope.analyses)
+      console.log(index)
+      console.log($scope.analyses[index])
+      $scope.analyses[index].include = !$scope.analyses[index].include
+
+      $scope.methylationChart = generateMethylation($scope.referenceCpGSites,$scope.analyses); 
+
+      if($scope.analyses[index].include){
         $scope.included += 1
         $scope.excluded -= 1
       }
@@ -118,7 +135,8 @@ angular.module('app.viewController', ['base64'])
         $scope.excluded += 1
         $scope.included -= 1
       }
-  	}
+    }
+
 
     $scope.moreInfo = function(read){
       $modal.open({
