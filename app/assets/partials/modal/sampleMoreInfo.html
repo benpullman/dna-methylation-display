@@ -27,6 +27,7 @@
 	</div>
 	<div>
 	<b>Methylation Pattern</b>
+	<p><span ng-repeat="site in read.methylation.sequence track by $index"><img height="10px" width="10px" ng-show="site=='M'" src="img/closed_circle.png"/><img  height="10px" width="10px" ng-show="site=='U'" src="img/open_circle.png"/><img  height="10px" width="10px" ng-show="site=='-'" src="img/dash.png"/><img  height="10px" width="10px" ng-show="site=='G' || site=='A' || site=='T'" src="img/x.png"/><img  height="10px" width="10px" ng-show="site=='X' || site=='C' || site=='error'" src="img/red_x.png"/></span></p>
 	</div>
 <div class="modal-footer">
 <button type="button" class="btn btn-default" ng-click="$close(result)" data-dismiss="modal">Close</button>
