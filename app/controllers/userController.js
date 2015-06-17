@@ -81,10 +81,12 @@ angular.module('app.userController', [])
         // },function(error){
         //     alert("Error in submition, please try again.")
         // });
+        console.log($scope.email)
         var fd = new FormData();
-        fd.append('bar', 'other');
-        fd.append('foo', $scope.fasta);
-        $http.post('/api/', fd, {
+        fd.append('reference', $scope.ref);
+        fd.append('map', $scope.map);
+        fd.append('sample', $scope.fasta);
+        $http.post('/api/?email=' + $scope.email, data = fd, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
         })
