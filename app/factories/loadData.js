@@ -3,7 +3,7 @@ factory('loadData', ['Resource', '$q', function(Resource, $q) {
 	return{
 		load:
 			function(id){
-				return Resource.get().$promise.then(function(result){
+				return Resource.get({'id':id}).$promise.then(function(result){
 					var one = "";
 					for(key in result.regions){
 				        console.log(key)

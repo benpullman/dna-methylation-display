@@ -11,7 +11,7 @@ angular.module('app.controllers', [])
 
     var load = function(){
           // console.log("id is "+$routeParams.id) //pass in eventually
-      loadData.load().then(function(loaded){
+      loadData.load($routeParams.id).then(function(loaded){
 
         // console.log(loaded);
         $scope.regions = loaded.all.regions; 

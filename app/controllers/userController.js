@@ -1,5 +1,5 @@
 angular.module('app.userController', [])
-  .controller('UserController', ['$scope','User','Resource','$http',function($scope,User,Resource,$http) {
+  .controller('UserController', ['$scope','User','Resource','$http','$location',function($scope,User,Resource,$http,$location) {
     $scope.initialView = true
     var initUser = function(user) {
         $scope.user = user
@@ -63,48 +63,105 @@ angular.module('app.userController', [])
             alert(error);
         });
     };
+    // $scope.submitForm = function() {
+    //     // User.add({id:$scope.user.id,command:"analyses", "name":$scope.name,"ref":$scope.selectRef.id,"map":$scope.selectMap.id},$scope.fasta, function(success){
+    //     //     alert("Submitted!")
+    //     // },function(error){
+    //     //     alert(error);
+    //     // });
+    //     // var toSubmit = {}
+    //     //     // toSubmit['name'] = $scope.name;
+    //     //     // toSubmit['email'] = $scope.email;
+    //     // toSubmit['dna'] = $scope.fasta;
+    //     // console.log($scope.fasta)
+    //     // // toSubmit['references'] = $scope.ref;
+    //     // // toSubmit['map'] = $scope.map;
+    //     // Resource.add(toSubmit,function(success){
+    //     //     alert("Job submitted successfully.")
+    //     // },function(error){
+    //     //     alert("Error in submition, please try again.")
+    //     // });
+    //     console.log($scope.email)
+    //     var fd = new FormData();
+    //     fd.append('reference', $scope.ref);
+    //     fd.append('map', $scope.map);
+    //     fd.append('sample', $scope.fasta);
+    //     $http.post('/api/?email=' + $scope.email, data = fd, {
+    //         transformRequest: angular.identity,
+    //         headers: {'Content-Type': undefined}
+    //     })
+    //     .success(function(data){
+    //         console.log('/view/' + data)
+    //     })
+    //     .error(function(){
+    //     });
+    //     // $http({
+    //     //     method:'POST',
+    //     //     url:'/api/',
+    //     //     headers: {'Content-Type': 'multipart/form-data'},
+    //     //     //transformRequest: angular.identity,
+    //     //     data: $scope.fasta
+    //     //   }).success(function(d){
+
+    //     //   }).error(function(e){
+
+    //     //   });
+    // }
     $scope.submitForm = function() {
-        // User.add({id:$scope.user.id,command:"analyses", "name":$scope.name,"ref":$scope.selectRef.id,"map":$scope.selectMap.id},$scope.fasta, function(success){
-        //     alert("Submitted!")
-        // },function(error){
-        //     alert(error);
-        // });
-        // var toSubmit = {}
-        //     // toSubmit['name'] = $scope.name;
-        //     // toSubmit['email'] = $scope.email;
-        // toSubmit['dna'] = $scope.fasta;
-        // console.log($scope.fasta)
-        // // toSubmit['references'] = $scope.ref;
-        // // toSubmit['map'] = $scope.map;
-        // Resource.add(toSubmit,function(success){
-        //     alert("Job submitted successfully.")
-        // },function(error){
-        //     alert("Error in submition, please try again.")
-        // });
+        $scope.submitted = true;
+        $scope.error = false;
+        $http.get('/api/initialize?email=' + $scope.email)
+        .success(function(data){
+            uploadAll(parseInt(data))
+        })
+        .error(function(){
+            makeError()
+        });
         console.log($scope.email)
-        var fd = new FormData();
-        fd.append('reference', $scope.ref);
-        fd.append('map', $scope.map);
-        fd.append('sample', $scope.fasta);
-        $http.post('/api/?email=' + $scope.email, data = fd, {
+    }
+    var uploadAll = function(jobIndex) {
+        var fd_ref = new FormData();
+        var fd_map = new FormData();
+        var fd_sam = new FormData();
+        fd_ref.append('reference', $scope.ref);
+        fd_map.append('map', $scope.map);
+        fd_sam.append('sample', $scope.fasta);
+        $http.post('/api/upload/' + jobIndex + '/map', data = fd_map, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        }).success(function(d){
+            $http.post('/api/upload/' + jobIndex + '/reference', data = fd_ref, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).success(function(d){
+                $http.post('/api/upload/' + jobIndex + '/sample', data = fd_sam, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                }).success(function(d){
+                    $location.path("/view/" + jobIndex) //redirect
+                }).error(function(e){
+                    makeError()
+                });      
+            }).error(function(e){
+                makeError()
+            });
+        }).error(function(e){
+            makeError()
+        });
+        // $http.post('/api/upload/' + jobIndex + '/sample', data = fd_sam, {
+        //     transformRequest: angular.identity,
+        //     headers: {'Content-Type': undefined}
+        // })
+    }
+    var makeError = function(){
+        $scope.submitted = false;
+        $scope.error = true;
+    }
+    var uploadSample = function(jobIndex) {
+        $http.post('/api/upload/' + jobIndex + '/sample', data = fd_sam, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
         })
-        .success(function(){
-        })
-        .error(function(){
-        });
-        // $http({
-        //     method:'POST',
-        //     url:'/api/',
-        //     headers: {'Content-Type': 'multipart/form-data'},
-        //     //transformRequest: angular.identity,
-        //     data: $scope.fasta
-        //   }).success(function(d){
-
-        //   }).error(function(e){
-
-        //   });
     }
     $scope.fastaSelect = function($files) {
         var reader = new FileReader();
