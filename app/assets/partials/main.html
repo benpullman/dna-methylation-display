@@ -11,15 +11,15 @@
 <h2>HITMAP</h2>
     <div class="row">
       <div class="col-lg-4">
-    <label>View As</label>
-    <div class="switch-toggle switch-3 well">
-      <input type="radio" name="view" id="square" value="square" ng-init="view = 'square'" ng-model="view"><label for="square" onclick="">Squares</label>
-      <input type="radio" name="view" id="circle" value="circle" ng-model="view"><label for="circle" onclick>Dots</label>
-      <input type="radio" name="view" id="chart" value="chart" ng-model="view"><label for="chart" onclick>Grid</label>
-      <a class="btn btn-primary"></a>
+        <label>View As</label>
+        <div class="switch-toggle well">
+        <!--<input type="radio" name="view" id="square" value="square" ng-init="view = 'square'" ng-model="view"><label for="square" onclick="">Squares</label>-->
+        <input type="radio" name="view" id="circle" value="circle" ng-init="view = 'circle'" ng-model="view"><label for="circle" onclick>Dots</label>
+        <input type="radio" name="view" id="chart" value="chart" ng-model="view"><label for="chart" onclick>Grid</label>
+        <a class="btn btn-primary"></a>
+      </div>
     </div>
-  </div>
-  <div class="col-lg-4">
+  <!--<div class="col-lg-4">
     <label>Table Options</label>
     <div class="switch-toggle well">
       <input type="radio" name="tview" id="space" value="space" ng-model="tview" checked>
@@ -29,60 +29,70 @@
             <a class="btn btn-primary"></a>
 
     </div>
+  </div>-->
   </div>
-  </div>
-  <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">More Options</button>
+  <!--<button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">More Options</button>-->
+  <button class="btn btn-default" ng-click="goToCsv()">Download CSV</button>
+  <button class="btn btn-default" ng-click="goToCoverage()">Download Coverage</button>
+  
   <hr>
-  <div collapse="!isCollapsed">
+  <!--<div collapse="!isCollapsed">
       
 <div class="input-group">
 Select Identity Cutoff for Calculating Methylation Level:
  <span><input ng-model="identityCutoff" ng-change="setIdentityCutoff()" min="0.5" max="1.0" step="0.005" type="range">{{identityCutoff}}</input></span>
 </div>
   <button class="btn btn-default btn-md" ng-click="changeName(regions, regex)">Change Sequence Read Names By Regex</button>
-</div>
+</div>-->
 <br>
 <!-- <table ng-class="{'no-space': view=='square'}">
  -->
- <table>  
+ <table style="border-collapse: collapse; margin-right:20px; margin-bottom: 20px" sv-root>  
  <tr>
     <td>
-      <table> <!-- first column -->
+      <table sv-part="allSamples"> <!-- first column -->
         <tr>
           <th>Sample</th>
         </tr>
-        <tr ng-repeat="sampleName in allSamples | orderBy">
-          <td style="height:30px; box-sizing: content-box; border: 0px; padding: 0px !important;">{{sampleName}} </td>
+        <tr ng-repeat="sampleNameHeader in allSamples | orderBy:natural('sampleNameHeader')" style="padding: 0px" sv-element>
+          <td style="width: 20px; height:35px; box-sizing: content-box; border: 0px; padding: 0px !important; cursor: hand" ng-show="sampleNameHeader!=''">{{sampleNameHeader}}</td>
         </tr>
 <!--         <br>
  -->      </table>
     </td>
-    <td ng-repeat="(regionName,region) in regions">
+    <td ng-repeat="(regionName,region) in regions" style="padding:0; margin:0;">
       <table> 
         <tr>
           <th>{{regionName}}</th>
         </tr>
-        <tr ng-repeat="(sampleName,sample) in region.samples | orderBy:'sampleName'">
-          <td style="height:25px; box-sizing: content-box; border-bottom-color:red; padding: 0px;">
+        <tr ng-repeat="sampleName in allSamples | orderBy:natural('sampleName')"  style="padding:0; margin:0;">
+          <td style="height:35px; border-bottom-color: white; padding:0; margin:0; padding-right: 3px; display: block" ng-if="sampleName!=''">
+
 <!--       <a ng-show="sample.analyses.length>0" ng-click="getInfo(sample.analyses)" tooltip="{{getTooltip(sampleName, sample)}}">
- -->      <a ng-show="sample.analyses.length>0" href="{{link(sampleName, regionName)}}" tooltip="{{getTooltip(sampleName, sample)}}">
-      <span ng-show="view=='circle'"><dot samples="sample.analyses" identity-cutoff="identityCutoff"></dot></span>
-      <span ng-show="view=='square'"><block samples="sample.analyses" identity-cutoff="identityCutoff"></block></span>
-      <span ng-show="view=='chart'"><!-- <methylation id="methylation" datajson="methylationChart" 
-                   height = "10" 
-                   width = "30"  
-                   yaxis-name = "'Frequency'" 
-                   yaxis-pos = "6" 
-                   d3-format= "'.0%'"
-                   region-name = "regionName"
-                   sample-name = "sampleName"
-                   included = "included"
-                   show-numbers = "false"
-                   whitespace = "false" ></methylation> --></span>
+ -->      <a ng-if="region['samples'][sampleName]['analyses']['length']>0"  href="{{link(sampleName, regionName)}}" tooltip="{{getTooltip(sampleName, region['samples'][sampleName])}}" style="height:35px; width: 100%;" ng-class="{linebackground: view=='chart'}">
+      <span ng-show="view=='circle'"><dot samples="region['samples'][sampleName]['analyses']" identity-cutoff="identityCutoff"></dot></span>
+      <span ng-show="view=='square'"><block samples="region['samples'][sampleName]['analyses']" identity-cutoff="identityCutoff"></block></span>
+      <span ng-show="view=='chart'">
+      <svg ng-repeat="methylation in region['samples'][sampleName]['methylationLevels']" height="100%" width="4" height="25" >
+        <rect ng-if="methylation[1]>5" width="100%" height="100%" stroke-width="0" fill="white" ng-attr-fill-opacity="1" />
+        <rect ng-if="methylation[1]>5" width="100%" height="100%" stroke-width="0" fill="blue" ng-attr-fill-opacity="{{ 1 - (methylation[0]/50) }}" />
+        <rect ng-if="methylation[1]>5" width="100%" height="100%" stroke-width="0" fill="red" ng-attr-fill-opacity="{{ (methylation[0]/50) - 1 }}" />
+        <rect ng-if="methylation[1]<=5" width="100%" height="100%" stroke-width="0" fill="gray"/>
+      </svg></span>
       
-          <span ng-show="sample.analyses.length==0"><dot></dot></span>
-        </a></td>
+        </a>
+        <span ng-if="region['samples'][sampleName]['analyses']['length']==0" style="min-height:35px">
+                <svg ng-hide="view=='chart'" height="35">
+                </svg>
+                <span ng-show="view=='chart'">
+                  <svg ng-repeat="methylation in defaultMethylationDict[regionName] track by $index" height="100%" width="4" height="25" >
+                    <rect width="100%" height="100%" stroke-width="0" fill="gray"/>
+                  </svg>
+                </span>
+        </span>
+        </td>
         </tr>
+
 <!--         <br>
  -->      </table>
     </td>

@@ -3,8 +3,26 @@
     overflow-x: auto;
 }
 td{
-	min-width:150px;
+	min-width: 100px;
+	overflow: hidden;
+    white-space: nowrap;
+}
+// tr{
+// 	min-width: 100px;
+// 	overflow: hidden;
+//     white-space: nowrap;
+// }
+// table{
+// 	min-width: 100px;
+// 	overflow: hidden;
+//     white-space: nowrap;
+// }
+table {
+    table-layout: fixed;
 }
 a{
 	cursor:pointer;
+}
+.linebackground {
+	background-color: gray;
 }

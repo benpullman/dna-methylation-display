@@ -20,7 +20,7 @@ angular.module('app', ['ngRoute','ngCookies','ui.bootstrap',
 	'app.controllers','app.submitController','angularFileUpload','app.userController','app.viewController',
 	'app.testController',
 	'app.methylation', 'app.loadData', 'app.set',
-	'app.services.resource','app.services.user','nameExp','markdown','dotDirective','blockDirective','methylationChart']).
+	'app.services.resource','app.services.user','nameExp','markdown','dotDirective','blockDirective','methylationChart','naturalSort','angular-sortable-view']).
 config(['$routeProvider','$locationProvider',function($routeProvider,$locationProvider) {
   $routeProvider.when('/', {templateUrl: 'partials/welcome.html', controller: 'UserController'});
   $routeProvider.when('/view/:id', {templateUrl: 'partials/main.html', controller: 'MainController'});

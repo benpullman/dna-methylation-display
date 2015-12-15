@@ -1,24 +1,22 @@
 from fabric.api import *
 
-env.hosts = ['root@104.131.17.217']
+env.hosts = ['ben@hitmap.stuartscottlab.org']
 
 def packApp():
 	local('brunch build --production')
 
 def uploadApp():
-    put('public/index.html','/var/www/display')
-    put('public/js','/var/www/display')
-    put('public/css','/var/www/display')
-    put('public/partials','/var/www/display')
-    put('public/img','/var/www/display')
-
-def uploadData():
-    put('public/data.json','/var/www/display')
-
-def uploadAll():
-    uploadApp()
-    uploadData()
+    put('public/index.html','/var/www/public/alpha')
+    put('public/js','/var/www/public/alpha')
+    put('public/css','/var/www/public/alpha')
+    put('public/partials','/var/www/public/alpha')
+    put('public/img','/var/www/public/alpha')
+    put('public/index.html','/var/www/public')
+    put('public/js','/var/www/public')
+    put('public/css','/var/www/public')
+    put('public/partials','/var/www/public')
+    put('public/img','/var/www/public')
 
 def deployApp():
     packApp()
-    uploadAll()
+    uploadApp()

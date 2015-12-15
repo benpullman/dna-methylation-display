@@ -10,19 +10,19 @@ angular.module('dotDirective', [])
     replace: true,
     controller: [ '$scope','methylation', function ($scope, methylation) {
         var getRadius = function(samples){
-          console.log(samples)
+          // console.log(samples)
           if (typeof samples === "undefined" || typeof samples.length === "undefined"){
             return 0;
           } else if (samples.length > 100){
             radius = 100
-          } else if (samples.length < 20){
-            radius = 20
+          } else if (samples.length < 8){
+            radius = 8
           } else {
             radius = samples.length
           }
           // console.log(radius)
 
-          return radius/4
+          return radius/8
         };
         $scope.$watch('identityCutoff', function(newVal, oldVal){
           if (newVal !== oldVal) {

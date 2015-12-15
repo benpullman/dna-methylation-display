@@ -1,0 +1,26 @@
+<div class="modal-header">
+<h4 class="modal-title">Barcode Specification and Example</h4></div>
+<div class="modal-body">
+	<div>
+	The barcodes are what we use the demultiplex the samples.  They should be in a CSV (not Excel CSV but plaintext CSV) or txt format.
+	</div>
+	<br />
+	<div>
+		<em>example_1,tag_1<br>
+			example_2,tag_2<br>
+			example_2,tag_3<br>
+		</em>
+	</div>
+	<br />
+	<div>
+		1,ATGCCTacaacttgagcc<br>
+		1,ATGCCTaatagaggcgtg<br>
+		2,ATGCCTacatgtgcacaa<br>
+		2,ATGCCTacacagtctcag<br>
+		3,ATGCCTatacgccgcggt<br>
+		3,ATGCCTagctgacctgcc<br>
+		4,ATGCCTattagtatgtac<br>
+	</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-default" ng-click="$close(result)" data-dismiss="modal">Close</button>
+</div>

@@ -18,6 +18,7 @@ angular.module('app.controllers', [])
         console.log(loaded.all.regions);
         $scope.allSamples = loaded.sampleNames;
         setter.setMethylation(loaded)
+        setDefaultMethylation($scope.regions)
       })
       .catch(function(error){
         alert("error loading methylation data. Please try again")
@@ -25,9 +26,48 @@ angular.module('app.controllers', [])
     };
     load();
 
+    var fillArray = function(n) {
+        console.log(n)
+        var a = new Array(n)
+        for(var i; i<n; i++){
+          a[i] = [0,0]
+        }
+        return a
+    }
+
+    var setDefaultMethylation = function(regions){
+      $scope.defaultMethylationDict = {}
+      for (var region in regions) {
+        console.log(region)
+        if (regions.hasOwnProperty(region)) {
+          var numMethylationLevels;
+          for (var sample in regions[region]['samples']){
+            if (regions[region]['samples'].hasOwnProperty(sample)) {
+              console.log(regions[region]['samples'][sample])
+              console.log(regions[region]['samples'][sample]['methylationLevels'])
+              if(regions[region]['samples'][sample]['methylationLevels'].length > 0){
+                numMethylationLevels = regions[region]['samples'][sample]['methylationLevels'].length
+                break;
+              }
+            }
+          }
+          console.log(numMethylationLevels)
+          $scope.defaultMethylationDict[region] = fillArray(numMethylationLevels)
+        }
+      }
+      console.log($scope.defaultMethylationDict)
+    }
+
     $scope.link = function(sampleName,region){
       // console.log(sampleName)
-      return "#/view/"+$routeParams.id+"/sample/"+sampleName+"--"+region
+      return "/#/view/"+$routeParams.id+"/sample/"+sampleName+"--"+region
+    }
+
+    $scope.goToCsv = function(){
+      window.open("https://hitmap.stuartscottlab.org/api/results/" + $routeParams.id + "/csv")
+    }
+    $scope.goToCoverage = function(){
+      window.open("https://hitmap.stuartscottlab.org/api/results/" + $routeParams.id + "/coverage")
     }
 
     $scope.getInfo = function(data){

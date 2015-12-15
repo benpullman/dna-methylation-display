@@ -1,5 +1,5 @@
 angular.module('app.submitController', [])
-  .controller('SubmitController', ['$scope','Resource',function($scope,Resource) {
+  .controller('SubmitController', ['$scope','$modal','Resource',function($scope,$modal,Resource) {
     $scope.fastaSelect = function($files) {
     	var reader = new FileReader();
 		reader.onload = function(e) {
@@ -34,4 +34,18 @@ angular.module('app.submitController', [])
     		alert("Error in submition, please try again.")
     	});
     };
+
+    $scope.FASTAExample = function() {
+      console.log("clicked for FASTA info")
+      $modal.open({
+        templateUrl: 'partials/modal/fasta-example.html',
+        size: 'md',
+        controller: ['$scope', '$modalInstance', function($scope, $modalInstance){
+          $scope.change = function(){
+            console.log("Looking at FASTA Example")
+          };
+        }]
+      });
+  };
+
   }]);

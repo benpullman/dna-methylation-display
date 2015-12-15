@@ -30,7 +30,7 @@ angular.module('app.viewController', ['base64'])
      }
     function runLoad(){
 
-    	loadData.load().then(function(loaded){
+    	loadData.load($routeParams.id).then(function(loaded){
     		format(loaded);
     	});
 

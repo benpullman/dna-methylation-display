@@ -2,6 +2,11 @@
 <div id="title" class="row">
 <h2>HITMAP</h2>
 <h4>High Throughput Methylation Analysis</h4>
+<p>A complete DNA methylation detection toolkit.</p>
+<p>Instructions:<br>
+1. Upload the FASTA output from a next generation sequencing system of targeted reads from reference areas.<br>
+2. Upload the references for each of the targeted reads.<br>
+3. Upload a file containing each sample name to the tag in the read.</p>
 </div>
 <br><br>
 <!-- <div id="welcome" class="row" ng-show="initialView">
@@ -122,7 +127,7 @@
     <label for="fasta" class="col-sm-4 control-label">FASTA</label>
     <div class="col-sm-4">
         <input class="btn btn-default" id="fasta" name="fasta" type="file" ng-file-select="fastaSelect($files)">
-        <p class="help-block">Upload your FASTA file here</p>
+        <p class="help-block">Upload your FASTA file here<br><a ng-click="FASTAExample()">Specifications and example FASTA</a></p>
 
             </div>
   </div>
@@ -130,7 +135,7 @@
     <label for="ref" class="col-sm-4 control-label">References</label>
     <div class="col-sm-4">
         <input class="btn btn-default" id="ref" name="ref" type="file" ng-file-select="refSelect($files)">
-        <p class="help-block">Upload your Reference file here</p>
+        <p class="help-block">Upload your Reference file here<br><a ng-click="referenceExample()">Specifications and example reference</a></p>
 
             </div>
   </div>
@@ -138,9 +143,12 @@
     <label for="bar" class="col-sm-4 control-label">Barcodes</label>
     <div class="col-sm-4">
         <input class="btn btn-default" id="bar" name="bar" type="file" ng-file-select="mapSelect($files)">
-        <p class="help-block">Upload your Barcode file here</p>
+        <p class="help-block">
+          Upload your Barcode file here<br>
+          <a ng-click="barcodeExample()">Specifications and example barcode</a>
+        </p>
 
-            </div>
+      </div>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-4 col-sm-4">

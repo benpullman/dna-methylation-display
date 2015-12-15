@@ -1,5 +1,5 @@
 angular.module('app.userController', [])
-  .controller('UserController', ['$scope','User','Resource','$http','$location',function($scope,User,Resource,$http,$location) {
+  .controller('UserController', ['$scope','User','Resource','$http','$location','$modal',function($scope,User,Resource,$http,$location,$modal) {
     $scope.initialView = true
     var initUser = function(user) {
         $scope.user = user
@@ -141,7 +141,7 @@ angular.module('app.userController', [])
                     $location.path("/view/" + jobIndex) //redirect
                 }).error(function(e){
                     makeError()
-                });      
+                });
             }).error(function(e){
                 makeError()
             });
@@ -183,5 +183,41 @@ angular.module('app.userController', [])
             $scope.map = reader.result;
         }
         reader.readAsText($files[0]);
+    };
+    $scope.FASTAExample = function() {
+      console.log("clicked for FASTA info")
+      $modal.open({
+        templateUrl: 'partials/modal/fasta-example.html',
+        size: 'md',
+        controller: ['$scope', '$modalInstance', function($scope, $modalInstance){
+          $scope.change = function(){
+            console.log("Looking at FASTA Example")
+          };
+        }]
+      });
+    };
+    $scope.referenceExample = function() {
+      console.log("clicked for reference info")
+      $modal.open({
+        templateUrl: 'partials/modal/reference-example.html',
+        size: 'md',
+        controller: ['$scope', '$modalInstance', function($scope, $modalInstance){
+          $scope.change = function(){
+            console.log("Looking at reference Example")
+          };
+        }]
+      });
+    };
+    $scope.barcodeExample = function() {
+      console.log("clicked for barcode info")
+      $modal.open({
+        templateUrl: 'partials/modal/barcode-example.html',
+        size: 'md',
+        controller: ['$scope', '$modalInstance', function($scope, $modalInstance){
+          $scope.change = function(){
+            console.log("Looking at barcode Example")
+          };
+        }]
+      });
     };
   }]);

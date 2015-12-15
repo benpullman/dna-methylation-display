@@ -1,0 +1,31 @@
+<div class="modal-header">
+<h4 class="modal-title">FASTA Specification and Example</h4></div>
+<div class="modal-body">
+	<div>
+	FASTA files are the standard format for sequence data.  Below is an illustrative example and an example with data.  Any file format is fine as long as it is ultimately plain text (.txt, .fasta).  Please limit to less than 20 MB for now.
+	</div>
+	<br />
+	<div>
+		<em>&gt;SAMPLE NAME (spaces, commas allowed but must start with a &gt;)<br>
+			NUCLEOTIDE SEQUENCE (A, C, T, G only no spaces)<br>
+			CAN BE ON MANY LINES OF UNEQUAL LENGTH
+		</em>
+	</div>
+	<br />
+	<div>
+		&gt;m140801_12/ccs<br>
+		GTGGTTGGATATGGGCGTTCTAGGGTAGGTAGTGGTTGGATATGGGCGTTCT<br>
+		ATGGTTGGTTGGGGTGGAGTTTGGGAGTGAGGTGGTTGGATATGGGCGTTCT<br>
+		TGCGTCGTGGTTTGTTTGGGAGTGCGGTGTTGTGGTTGGATATGGGCGTTCT<br>
+		TAGGATTTAGG<br>
+		&gt;m140801_64/ccs<br>
+		ATGCCTTCAACCAAGGTTGAAAGGTCTGGAGGTGGTTGGATATGGGCGTTCT<br>
+		CAAACCTCAACAACCTCCAACCTACACAAAAGTGGTTGGATATGGGCGTTCT<br>
+		CCACACACCTCCAAATCACAAATAACCCAACGTGGTTGGATATGGGCGTTCT<br>
+		ACCCCCTAAAATCCAAAACAACCTCTATCCCGTGGTTGGATATGGGCGTTCT<br>
+		ACAACCAGCATAAAACAACAAACCAACACAAGTGGTTGGATATGGGCGTTCT<br>
+		TTGCTTGAGGCAT
+	</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-default" ng-click="$close(result)" data-dismiss="modal">Close</button>
+</div>
